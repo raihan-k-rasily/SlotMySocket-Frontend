@@ -1,0 +1,32 @@
+@import "tailwindcss";
+/* --- New Class for LUXURY Stack Card (Add to ScrollStack.css) --- */
+
+.lux-stack-card {
+    /* Use the designated card fill color with slight transparency for depth */
+    background-color: #1e1b30; 
+    border-radius: 20px;
+    padding: 3.5rem; /* More generous padding */
+    box-sizing: border-box;
+    position: relative;
+    
+    /* BOLD, NEON border for luxury contrast */
+    border: 1px solid #00D2FF40; 
+    
+    /* Elegant inner shadow for depth against the dark background */
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.4), 
+        0 0 30px #00D2FF15; /* Subtle blue glow */
+        
+    /* Use a slight backdrop filter for a touch of glass effect */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    
+    /* Animation transition for non-scrolled properties (like hover, if you add it later) */
+    transition: all 0.4s ease-out;
+}
+
+/* Ensure the stacking cards are large enough to feel substantial */
+.scroll-stack-card {
+    height: 30rem; /* Increased height for premium feel */
+    /* ... rest of your existing .scroll-stack-card styles ... */
+}
