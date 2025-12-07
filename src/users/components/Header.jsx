@@ -4,7 +4,7 @@ import PillNav from '../../bits/components/PillNav ';
 import logo from '../../assets/SlotMySocket.png';
 
 function Header() {
-    return (
+    return ( 
         <>
             <PillNav
                 logo={logo}

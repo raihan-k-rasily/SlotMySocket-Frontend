@@ -109,7 +109,7 @@ function Home() {
                 <p style={{ textAlign: 'center', marginBottom: '40px', color: '#dddddd' }}>Follow these quick steps to reserve your next charge.</p>
                 
                 {/* Ensure the ScrollStack cards are visible against the dark background */}
-                <ScrollStack useWindowScroll={true}>
+                {/* <ScrollStack useWindowScroll={true}>
                     <ScrollStackItem>
                         <h3 style={textStyle}>1. Find & Filter 🔎</h3>
                         <p style={textStyle}>Locate the nearest charging station using your current location or a target destination. Filter results instantly by **connector type** (CCS, CHAdeMO, etc.) and power level.</p>
@@ -126,7 +126,7 @@ function Home() {
                         <h3 style={textStyle}>4. Get Notified 🔔</h3>
                         <p style={textStyle}>Receive automatic notifications when your reserved slot is **about to begin** and when your charging session is complete, so you never wait unnecessarily.</p>
                     </ScrollStackItem>
-                </ScrollStack>
+                </ScrollStack> */}
             </div>
         </>
     );
