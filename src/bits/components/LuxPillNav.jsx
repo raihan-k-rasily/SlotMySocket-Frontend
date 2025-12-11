@@ -7,9 +7,9 @@ import '../css/PillNav.css';
 
 // LUXURY PALETTE (Unchanged)
 const LUX_TEXT = '#f0f0f0';
-const LUX_CARD_FILL = '#1e1b30'; // Dark Purple/Slate (Use for background of the Nav bar itself)
+const LUX_CARD_FILL = '#1B4D3E'; // Dark Purple/Slate (Use for background of the Nav bar itself)
 const LUX_ACCENT = '#00D2FF';
-const LUX_ACTIVE = '#FF8C00';
+const LUX_ACTIVE = '#1B4D3E';
 
 // ... (hoverPillVariants unchanged) ...
 

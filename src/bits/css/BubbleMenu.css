@@ -1,0 +1,9 @@
+
+/* Inside BubbleMenu's CSS file, on the main menu wrapper element */
+.bubble-menu-wrapper { 
+    /* ... existing styles ... */
+    background: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05); /* Soft, deep shadow */
+}
