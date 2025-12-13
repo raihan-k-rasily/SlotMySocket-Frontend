@@ -1,0 +1,122 @@
+/* ================================================= */
+/* GLOBAL PAGE SPACING (HEADER SAFE AREA) */
+/* ================================================= */
+
+.contact-page {
+  min-height: 100vh;
+  padding-top: 120px;   /* Space for fixed header */
+  padding-bottom: 80px;
+}
+
+/* ================================================= */
+/* CENTERED CONTAINER (PREVENT EDGE OVERFLOW) */
+/* ================================================= */
+
+.contact-wrapper {
+  max-width: 1200px;        /* Keeps content inside window */
+  margin: 0 auto;
+  padding: 0 24px;          /* Side breathing space */
+}
+
+/* ================================================= */
+/* GRID LAYOUT */
+/* ================================================= */
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  padding-bottom: 2rem;
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .contact-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center; /* Vertical alignment fix */
+  }
+
+  .contact-form-col {
+    order: 2;
+  }
+
+  .contact-info-col {
+    order: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .contact-col-header,
+  .contact-social-reminder {
+    text-align: left;
+  }
+}
+
+/* ================================================= */
+/* FORM SPACING */
+/* ================================================= */
+
+.contact-form > div {
+  margin-bottom: 1.5rem;
+}
+
+/* ================================================= */
+/* INFO LIST */
+/* ================================================= */
+
+.contact-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ================================================= */
+/* INPUT STATES */
+/* ================================================= */
+
+input:focus,
+textarea:focus {
+  border-bottom-color: #00A36C !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9CA3AF;
+}
+
+/* ================================================= */
+/* INFO BOX */
+/* ================================================= */
+
+.info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.info-box:hover {
+  background-color: #1F2937;
+}
+.contact-header {
+  max-width: 800px;
+  margin: 0 auto 64px auto;
+  padding: 0 16px;
+
+  /* 🔥 TRUE CENTERING FIX */
+  display: flex;
+  flex-direction: column;
+  align-items: center;     /* horizontal */
+  justify-content: center; /* vertical */
+
+  text-align: center;
+}
+@media (min-width: 1024px) {
+  .contact-header {
+    max-width: 700px;
+  }
+}

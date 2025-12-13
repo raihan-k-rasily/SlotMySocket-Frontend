@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 /* --- New Class for LUXURY Stack Card (Add to ScrollStack.css) --- */
 
 .lux-stack-card {
