@@ -21,16 +21,16 @@ function Header() {
                 // --- COLOR INVERSION APPLIED HERE ---
 
                 // Old: baseColor="#000000" (Black) -> New: White
-                baseColor="rgb(116, 59, 169)"
+                baseColor="#00A36C"
                 
                 // Old: pillColor="#ffffff" (White) -> New: Black
-                pillColor="#ffffff"
+                pillColor="#1A202C"
                 
                 // Old: hoveredPillTextColor="#ffffff" (White) -> New: Black
-                hoveredPillTextColor="#ffffff"
+                hoveredPillTextColor="#1A202C"
                 
                 // Old: pillTextColor="#000000" (Black) -> New: White
-                pillTextColor="rgb(116, 59, 169)"
+                pillTextColor="#00A36C"
             />
         </>
     )
