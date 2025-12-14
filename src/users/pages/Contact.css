@@ -1,7 +1,16 @@
 /* ================================================= */
 /* GLOBAL PAGE SPACING (HEADER SAFE AREA) */
 /* ================================================= */
-
+.contact-header-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10; /* Keep it above all other content */
+    padding: 20px 0; /* Add top/bottom padding for vertical centering of header content */
+    display: flex;
+    justify-content: center;
+}
 .contact-page {
   min-height: 100vh;
   padding-top: 120px;   /* Space for fixed header */

@@ -1,0 +1,234 @@
+/* ================================================= */
+/* GLOBAL CONTAINER & BACKGROUND */
+/* ================================================= */
+
+.auth-container {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; 
+    overflow: hidden; 
+    background-color: #000000; 
+}
+
+/* Wrapper for DotGrid ensures it covers the full viewport */
+.dot-grid-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* ================================================= */
+/* AUTH CARD (Premium Glassmorphism) */
+/* ================================================= */
+
+.auth-card {
+    position: relative; 
+    z-index: 10; 
+    
+    width: 90%;
+    max-width: 650px; /* Adjusted max width for 2-column form */
+    padding: 3rem; 
+    border-radius: 16px; 
+    
+    /* PREMIUM GLASS EFFECT */
+    background-color: rgba(255, 255, 255, 0.037); 
+    
+    /* SOFTER, WIDER SHADOW */
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 
+                inset 0 0 10px rgba(255, 255, 255, 0.05); 
+
+    backdrop-filter: blur(12px); 
+    -webkit-backdrop-filter: blur(12px);
+    
+    /* More subtle border highlight */
+    border: 1px solid rgba(255, 255, 255, 0.037); 
+    
+    color: #F0F4F8; 
+}
+
+.auth-header {
+    font-size: 2.5rem; 
+    font-weight: 800; 
+    margin-bottom: 0.75rem;
+    text-align: center;
+    color: #FFFFFF;
+    /* TEXT SHADOW for a soft glow effect */
+    text-shadow: 0 0 5px rgba(57, 255, 20, 0.3);
+}
+
+.auth-subheader {
+    font-size: 1.05rem;
+    margin-bottom: 2.5rem; 
+    text-align: center;
+    color: #A0AEC0;
+}
+
+/* ================================================= */
+/* FORM ELEMENTS */
+/* ================================================= */
+
+/* Standard vertical spacing for single-column forms (Login, User Register) */
+.auth-form > div {
+    margin-bottom: 1.25rem; 
+}
+
+.auth-input {
+    width: 100%;
+    padding: 14px 18px; 
+    font-size: 1rem;
+    border-radius: 8px; 
+    
+    border: 1px solid #333; 
+    background-color: rgba(5, 5, 5, 0.9); 
+    color: #F0F4F8;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-input:focus {
+    outline: none;
+    border-color: #39FF14; 
+    box-shadow: 0 0 0 1px #39FF14, 0 0 8px rgba(57, 255, 20, 0.6); 
+}
+
+.auth-input::placeholder {
+    color: #718096;
+}
+
+/* PREMIUM BUTTON STYLING */
+.auth-button {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem; 
+    font-weight: 700;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin-top: 1.5rem;
+
+    background-color: #39FF14;
+    background-image: linear-gradient(180deg, #39FF14 0%, #20CC08 100%);
+    color: #000000; 
+    
+    box-shadow: 0 5px 20px rgba(57, 255, 20, 0.4); 
+    
+    transition: all 0.25s ease;
+}
+
+.auth-button:hover {
+    background-color: #20CC08; 
+    background-image: linear-gradient(180deg, #20CC08 0%, #15A005 100%);
+    box-shadow: 0 8px 25px rgba(57, 255, 20, 0.6); 
+    transform: translateY(-2px);
+}
+
+.auth-button:active {
+    transform: translateY(0);
+}
+
+/* ------------------------------------------------- */
+/* OWNER REGISTRATION GRID STYLES */
+/* ------------------------------------------------- */
+
+.owner-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal-width columns */
+    gap: 3rem; /* Increased horizontal gap for separation */
+    margin-bottom: 1.5rem; /* Space before the submit button */
+}
+
+/* FIX: Apply vertical spacing to input wrappers *inside* the grid columns */
+.owner-form-grid .auth-col > div {
+    margin-bottom: 1.25rem; 
+}
+
+/* FIX: Remove bottom margin from the last input wrapper in each column to prevent extra space */
+.owner-form-grid .auth-col > div:last-child {
+    margin-bottom: 0;
+}
+
+/* Secondary Divider for within the columns */
+.form-divider-secondary {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #F0F4F8; 
+    text-align: left;
+    margin-bottom: 1.25rem; 
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+}
+
+/* ================================================= */
+/* TOGGLE LINK & OPTIONS */
+/* ================================================= */
+
+.auth-toggle {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1); 
+    text-align: center;
+    font-size: 0.95rem; 
+    color: #A0AEC0;
+}
+
+.toggle-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    margin-left: 0.3rem;
+    padding: 0;
+    color: #39FF14; 
+    text-decoration: none; 
+    transition: color 0.2s, text-decoration 0.2s;
+}
+
+.toggle-button:hover {
+    color: #20CC08;
+    text-decoration: underline; 
+}
+
+.register-options {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.toggle-separator {
+    color: #A0AEC0;
+}
+
+/* The old form-divider styles are left below for completeness, 
+   though form-divider-secondary is now used in the grid. */
+.form-divider {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #39FF14; 
+    text-align: center;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.form-divider::before,
+.form-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 30%; 
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.form-divider::before {
+    left: 5%;
+}
+
+.form-divider::after {
+    right: 5%;
+}

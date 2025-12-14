@@ -21,7 +21,8 @@ function App() {
           <Route path='*' element={<PNF/>}/>
 
           <Route path='login' element={<Auth/>}/>
-          <Route path='register' element={<Auth register/>}/>
+          <Route path='userregister' element={<Auth userRegister/>}/>
+          <Route path='ownerregister' element={<Auth ownerRegister/>}/>
 
           {/* USERS */}
           <Route path='profile' element={<Profile/>}/>

@@ -62,12 +62,25 @@ function Contact() {
     };
 
     return (
-      <div >
-      <Header/>
-            <div 
-                className="contact-page"
-                style={{ backgroundColor: DEEP_DARK, color: TEXT_WHITE }}
-            >
+      // NEW Contact.jsx
+      <div style={{ position: 'relative', minHeight: '100vh', backgroundColor: DEEP_DARK }}>
+            {/* 1. Absolute Positioned Header */}
+            <motion.div
+                initial={{ y: -50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                className="contact-header-wrapper" // New class for CSS targeting
+            >
+                <Header />
+            </motion.div>
+
+            {/* 2. Main Content (Starts from the top, pushing down for header space) */}
+            <div 
+                className="contact-page"
+                style={{ color: TEXT_WHITE }} // Background color is on the main wrapper div now
+            >
+                {/* ... rest of your contact content ... */}
+
                 <div className="contact-wrapper">
                     <motion.div
                         variants={containerVariants}

@@ -1,0 +1,162 @@
+/* ================================================= */
+/* GLOBAL PAGE & CONTAINER STYLES */
+/* ================================================= */
+
+.stations-page-content {
+    /* Space for fixed header */
+    padding-top: 120px; 
+    padding-bottom: 80px;
+}
+
+.stations-wrapper {
+    max-width: 1400px; /* Slightly wider container for the map */
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.stations-header {
+    margin: 0 auto 40px auto;
+    text-align: center;
+}
+
+/* ================================================= */
+/* TWO-COLUMN GRID LAYOUT */
+/* ================================================= */
+
+.stations-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+/* Desktop Layout: Left Filter Panel (smaller), Right Map (larger) */
+@media (min-width: 1024px) {
+    .stations-grid {
+        grid-template-columns: 350px 1fr; /* Fixed width for filters, rest for map */
+        align-items: flex-start;
+    }
+
+    .stations-header {
+        text-align: left;
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+
+/* ================================================= */
+/* FILTER PANEL STYLES */
+/* ================================================= */
+
+.filter-panel {
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    /* Set max height for scrollable filter on desktop, full height on mobile */
+    max-height: 800px; 
+    overflow-y: auto;
+}
+
+.filter-group {
+    margin-bottom: 1.5rem;
+}
+
+.filter-panel label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.filter-panel select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    appearance: none; /* Removes default select arrow */
+}
+
+.station-list-preview {
+    margin-top: 2rem;
+    border-top: 1px solid #374151;
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed #374151;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.list-item:hover {
+    background-color: #1a202c50;
+}
+.list-item .availability {
+    font-size: 0.875rem;
+}
+
+
+/* ================================================= */
+/* MAP DISPLAY STYLES */
+/* ================================================= */
+
+.map-display {
+    position: relative;
+    /* Map should take up significant vertical space */
+    min-height: 600px; 
+}
+
+.map-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+/* Search Bar Overlay */
+.search-bar-overlay {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 90%;
+    max-width: 400px;
+    display: flex;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.map-search-input {
+    flex-grow: 1;
+    padding: 1rem;
+    background-color: #161B22;
+    color: #E2E8F0;
+    border: none;
+    outline: none;
+}
+
+.map-search-input::placeholder {
+    color: #6B7280;
+}
+
+.search-button {
+    background-color: #00A36C;
+    color: #0D1117;
+    padding: 1rem;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: opacity 0.2s;
+}
+.search-button:hover {
+    opacity: 0.9;
+}   
