@@ -1,0 +1,359 @@
+/* ================================================= */
+/* GLOBAL VARIABLES (Consolidated) */
+/* ================================================= */
+
+:root {
+  --admin-bg-dark: #0a0a0a; /* Deep Dark Background */
+  --sidebar-width: 260px;
+  --admin-primary: #39ffac; /* Electric Cyan/Green - Main Accent */
+  --admin-text: #f0f4f8; /* Light gray text for main content */
+  --admin-muted: #8b949e; /* Muted gray text for details */
+  --admin-border: rgba(255, 255, 255, 0.08); /* Subtle border color */
+  --card-bg: #141414; /* Darker card background */
+  --purple-accent: #a78bfa; /* Purple for Owner verification */
+  --failure-red: #dc2626;
+  --warning-yellow: #f59e0b;
+}
+
+/* ================================================= */
+/* LAYOUT & MAIN CONTENT (Unchanged) */
+/* ================================================= */
+
+body {
+  background-color: var(--admin-bg-dark);
+}
+
+.admin-dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.admin-main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: var(--sidebar-width);
+}
+
+.admin-main-content {
+  margin: 24px;
+  padding: 40px;
+  border-radius: 18px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0.01)
+  );
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--admin-border);
+  box-shadow:
+    0 15px 50px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* ================================================= */
+/* PAGE TITLE (Unchanged) */
+/* ================================================= */
+
+.admin-page-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--admin-text);
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.admin-page-title::before {
+  content: '';
+  width: 6px;
+  height: 32px;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    var(--admin-primary),
+    #22d3ee
+  );
+}
+
+/* ================================================= */
+/* TABS (MAXIMUM SPECIFICITY PILLS STYLE FIX) */
+/* ================================================= */
+
+/* Tab Container FIX */
+.flowbite-react-tabs-list {
+  border-bottom: none !important;
+  background: var(--card-bg) !important; /* Dark container background */
+  border-radius: 999px;
+  padding: 8px;
+  gap: 10px; 
+  width: fit-content;
+  box-shadow: inset 0 0 0 1px var(--admin-border);
+  margin-bottom: 20px; 
+}
+
+
+.inactive-pills-forced:hover {
+    color: var(--admin-primary) !important;
+}
+
+
+
+
+.flowbite-react-tabs-list li a:hover {
+  color: var(--admin-primary) !important;
+}
+
+/* Tab Button Base Style FIX (Target the inner <li> element and its children) */
+.flowbite-react-tabs-list li button {
+    /* all: unset !important; */
+    color: inherit !important;
+    font-weight: inherit !important;
+    /* Remove padding/background to prevent double-styling */
+    padding: 0 !important; 
+    background-color: transparent !important;
+}
+.flowbite-react-tabs-list li a[aria-selected="true"] {
+  background-color: var(--admin-primary) !important; 
+  color: var(--admin-bg-dark) !important; /* Ensure dark text on the light background */
+  font-weight: 700 !important;
+  box-shadow: 0 4px 12px rgba(57, 255, 172, 0.4);
+}
+
+
+/* Tab Button Hover FIX */
+.flowbite-react-tabs-list li button:hover {
+  color: var(--admin-primary) !important;
+}
+
+/* Active Tab Button FIX (Force solid background and dark text) */
+.flowbite-react-tabs-list li button[aria-selected="true"] {
+  /* Use primary color as the solid background */
+  background-color: var(--admin-primary) !important; 
+  color: var(--admin-bg-dark) !important; /* Ensure dark text on the light background */
+  font-weight: 700 !important;
+  box-shadow: 0 4px 12px rgba(57, 255, 172, 0.4);
+}
+
+/* ================================================= */
+/* GRIDS (Unchanged) */
+/* ================================================= */
+
+.owner-grid,
+.slot-grid {
+      margin-top: 10px; 
+      display: grid;
+      gap: 26px;
+      grid-template-columns: 1fr;
+      justify-content: center;
+}
+@media (min-width: 768px) {
+   .owner-grid,
+   .slot-grid {
+      grid-template-columns: repeat(2, 1fr);
+   }
+}
+
+@media (min-width: 1024px) {
+  .owner-grid,
+  .slot-grid {
+    margin-top: 10px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ================================================= */
+/* CARDS, ACTIONS, & BADGES (Unchanged) */
+/* ================================================= */
+
+.owner-card-wrapper,
+.slot-card-wrapper {
+  max-width: 380px;
+}
+
+.owner-card-base,
+.slot-card-base {
+  position: relative;
+  border-radius: 14px !important;
+  padding: 22px !important;
+  background-color: var(--card-bg) !important;
+  box-shadow:
+    0 18px 35px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.owner-card-base {
+  border: 1px solid var(--purple-accent) !important;
+}
+
+.slot-card-base {
+  border: 1px solid var(--admin-border) !important;
+}
+
+.owner-card-base::before,
+.slot-card-base::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.06),
+    transparent 45%
+  );
+  pointer-events: none;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+.slot-id {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--admin-primary);
+}
+
+.card-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  font-size: 0.95rem;
+}
+
+.card-details strong {
+  color: var(--admin-muted);
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 14px;
+  border-top: 1px solid var(--admin-border);
+}
+
+.btn-view,
+.btn-approve,
+.btn-details {
+  border-radius: 999px !important;
+  padding: 8px 20px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.4px;
+  transition: all 0.25s ease;
+  box-shadow:
+    0 6px 20px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.btn-view {
+  background: linear-gradient(135deg, #7c3aed, #a78bfa) !important;
+  color: #fff !important;
+}
+
+.btn-view:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 22px rgba(167,139,250,0.7);
+}
+
+.btn-approve {
+  background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+  color: #000 !important;
+}
+
+.btn-approve:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 22px rgba(34,197,94,0.8);
+}
+
+.btn-details {
+  background: rgba(255,255,255,0.06) !important;
+  color: var(--admin-text) !important;
+  border: 1px solid var(--admin-border) !important;
+}
+
+.btn-details:hover {
+  background: rgba(255,255,255,0.12) !important;
+  box-shadow: 0 0 16px rgba(255,255,255,0.2);
+}
+
+.badge {
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+}
+
+.badge-warning {
+  background: linear-gradient(135deg, #facc15, #f59e0b);
+  color: #000 !important;
+  box-shadow: 0 0 14px rgba(250,204,21,0.6);
+  animation: pulseBadge 1.8s infinite;
+}
+
+@keyframes pulseBadge {
+  0% { box-shadow: 0 0 12px rgba(250,204,21,0.6); }
+  50% { box-shadow: 0 0 22px rgba(250,204,21,0.9); }
+  100% { box-shadow: 0 0 12px rgba(250,204,21,0.6); }
+}
+
+.badge-success {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #000 !important;
+}
+
+.badge-failure {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff !important;
+}
+
+/* ================================ */
+/* PREMIUM FLOWBITE PILLS (FINAL) */
+/* ================================ */
+
+.premium-tabs ul {
+  background: #141414;
+  padding: 8px;
+  border-radius: 999px;
+  gap: 10px;
+  display: flex;
+  width: fit-content;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+}
+
+/* Base pill */
+.premium-tabs button {
+  border-radius: 999px !important;
+  padding: 8px 22px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.4px;
+  color: var(--admin-muted) !important;
+  background: transparent !important;
+  transition: all 0.25s ease;
+}
+
+/* Hover */
+.premium-tabs button:hover {
+  color: var(--admin-primary) !important;
+}
+
+/* ACTIVE pill — THIS IS THE KEY */
+.premium-tabs button[aria-selected="true"] {
+  background: linear-gradient(135deg, #39ffac, #22d3ee) !important;
+  color: #000 !important;
+  box-shadow:
+    0 0 18px rgba(57,255,172,0.6),
+    0 6px 18px rgba(0,0,0,0.6);
+}

@@ -1,0 +1,141 @@
+/* ================================================= */
+/* MAGIC BENTO GRID LAYOUT (New/Updated CSS) */
+/* ================================================= */
+
+/* 🟢 FIX: Use a more robust grid layout for the bento section */
+.card-grid-layout {
+  display: grid;
+  /* 🟢 KEY FIX: Create 4 columns on large screens. 
+     The minmax(0, 1fr) ensures columns shrink if needed and 
+     prevents overflow/scrollbar issues. */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px; /* Consistent spacing */
+}
+
+/* 🟢 Small Card (1x1) - Default span: Takes 1 column */
+.card-span-1 {
+  grid-column: span 1;
+}
+
+/* 🟢 Large Card/Rectangle (1x2) - Takes 2 columns */
+.card-span-2 {
+  grid-column: span 2;
+  /* For the large graph cards, ensure they take up more vertical space */
+  min-height: 350px; 
+}
+
+/* ================================================= */
+/* MAGIC BENTO CARD STYLING (Existing/Refined) */
+/* ================================================= */
+
+.magic-bento-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 30px;
+  background-color: var(--admin-card-bg); 
+  /* Fallback using admin var if card.color is not defined */
+  border: 1px solid var(--admin-border-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform;
+}
+
+/* Border Glow Effect */
+.magic-bento-card--border-glow::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  border-radius: 12px;
+  padding: 1px;
+  background: radial-gradient(
+    var(--glow-radius, 300px) at var(--glow-x, 50%) var(--glow-y, 50%),
+    rgba(var(--glow-color, 132, 0, 255), var(--glow-intensity, 0.0)) 0%,
+    transparent 100%
+  );
+  mask: 
+    linear-gradient(#fff, #fff) content-box, 
+    linear-gradient(#fff, #fff);
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Card Content */
+.magic-bento-card__header {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.magic-bento-card__label {
+  padding: 4px 10px;
+  background-color: rgba(var(--glow-color), 0.1);
+  color: var(--admin-primary-color);
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.magic-bento-card__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: var(--admin-text-light);
+}
+
+.magic-bento-card__description {
+  font-size: 0.9rem;
+  color: var(--admin-text-muted);
+}
+
+/* 🟢 Graph Placeholder Styling */
+.graph-placeholder {
+    margin-top: 20px;
+    height: 100%;
+    min-height: 200px;
+    background-color: rgba(var(--glow-color), 0.05);
+    border: 1px dashed rgba(var(--glow-color), 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: var(--admin-text-muted);
+    font-size: 0.85rem;
+    padding: 10px;
+}
+
+/* ================================================= */
+/* PARTICLE ANIMATION STYLING (Existing) */
+/* ================================================= */
+
+.particle-container {
+  /* Inherits styles from .magic-bento-card, ensures position:relative for particles */
+}
+/* ... (Particle, Spotlight, and other GSAP-related CSS are assumed to be present) */
+
+
+/* ================================================= */
+/* MEDIA QUERIES (Responsiveness) */
+/* ================================================= */
+
+/* Tablet/Small Desktop */
+@media (max-width: 1200px) {
+  .card-grid-layout {
+    /* Switch to 3 columns */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .card-grid-layout {
+    /* Switch to 1 column for all elements */
+    grid-template-columns: 1fr;
+  }
+  .card-span-1, .card-span-2 {
+    grid-column: span 1; /* All cards take full width on mobile */
+  }
+}
