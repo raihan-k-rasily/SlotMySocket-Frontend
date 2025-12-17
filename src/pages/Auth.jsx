@@ -1,20 +1,31 @@
 // Auth.jsx
 import React, { useState } from 'react';
-import DotGrid from '../bits/components/DotGrid'; 
+import DotGrid from '../bits/components/DotGrid';
 import './Auth.css';
+import { useNavigate } from 'react-router-dom';
+// ⚠️ ASSUMPTION & FIX: Importing necessary items:
+// 1. You need your API functions.
+// 2. You need the toast library (e.g., react-toastify).
+import { toast } from 'react-toastify';
+import { loginAPI, registerUserAPI } from '../services/allAPIs'; // <-- FIX: Assuming this path
+import { ToastContainer, toast } from 'react-toastify';
 
+// The component receives userRegister and ownerRegister functions (likely from a parent component)
 function Auth({ userRegister, ownerRegister }) {
   // Mode can be 'login', 'user_register', or 'owner_register'
-  const [mode, setMode] = useState('login'); 
-  
+  const [mode, setMode] = useState('login');
+
+  const navigate = useNavigate()
+
+  // The primary state object to hold all form data
   const [formData, setFormData] = useState({
-    username: '', 
+    username: '',
     email: '',
     password: '',
     // Owner specific fields
     slotName: '',
-    latitude: '', 
-    longitude: '', 
+    latitude: '',
+    longitude: '',
   });
 
   const isRegisterMode = mode !== 'login';
@@ -25,41 +36,152 @@ function Auth({ userRegister, ownerRegister }) {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  // Function to clear form data after successful operation
+  const clearFormData = () => {
+    setFormData({
+      username: '',
+      email: '',
+      password: '',
+      slotName: '',
+      latitude: '',
+      longitude: '',
+    });
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (mode === 'login') {
       // 1. LOGIN LOGIC
-      console.log('Login submitted:', formData.username);
+
+      // 🐛 FIX: Create payload from formData for login (only username/email and password needed)
+      const loginPayload = {
+        email: formData.email,
+        password: formData.password
+      };
+
+
+      console.log('Login submitted:', loginPayload.username);
+
+      try {
+        // 🐛 FIX: Use the correct payload (loginPayload) instead of userData
+        const response = await loginAPI(loginPayload);
+        console.log(response);
+
+        if (response.status === 201) {
+          sessionStorage.setItem("userDetails", JSON.stringify(response.data.user));
+          sessionStorage.setItem("token", JSON.stringify(response.data.token));
+
+          toast.success("Login successfully", {
+            position: "top-center", autoClose: 3000, hideProgressBar: false, closeOnClick: false,
+            pauseOnHover: true, draggable: true, progress: undefined, theme: "colored",
+          });
+
+          // Clear form data and navigate
+          clearFormData();
+
+          if (response.data?.user?.role === "Bookstore Admin") {
+            setTimeout(() => { navigate("/adminhome"); }, 4000);
+          } else {
+            setTimeout(() => { navigate("/"); }, 4000);
+          }
+
+        } else {
+          toast.error("Invalid user details", {
+            position: "top-center", autoClose: 3000, hideProgressBar: false, closeOnClick: false,
+            pauseOnHover: true, draggable: true, progress: undefined, theme: "colored",
+          });
+          console.log(response.response.data.message);
+        }
+      } catch (error) {
+        console.log("Login Error:", error);
+        toast.error("An error occurred during login.", { position: "top-center", autoClose: 3000, theme: "colored" });
+      }
+
     } else if (mode === 'user_register') {
       // 2. USER REGISTER LOGIC
-      console.log('User Register submitted:', formData);
-      userRegister(formData);
+
+      // 🐛 FIX: Create user registration payload from formData
+      const userRegisterPayload = {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        role: 'User' // Assuming a default role for clarity
+      };
+
+      console.log('User Register submitted:', userRegisterPayload);
+      //       userRegister(userRegisterPayload); // Call the prop function
+
+      try {
+        // 🐛 FIX: Use the correct payload (userRegisterPayload) instead of userData
+        const response = await registerUserAPI(userRegisterPayload);
+        console.log(response);
+
+        if (response.status === 201) {
+          toast.success("Registration successfully", {
+            position: "top-center", autoClose: 3000, hideProgressBar: false, closeOnClick: false,
+            pauseOnHover: true, draggable: true, progress: undefined, theme: "colored",
+          });
+
+          clearFormData();
+
+          setTimeout(() => { navigate("/login"); }, 4000);
+
+        } else {
+          toast.error("User already existing or registration failed.", {
+            position: "top-center", autoClose: 3000, hideProgressBar: false, closeOnClick: false,
+            pauseOnHover: true, draggable: true, progress: undefined, theme: "colored",
+          });
+          console.log(response.response.data.message);
+        }
+      } catch (error) {
+        console.log("User Registration Error:", error);
+        toast.error("An error occurred during user registration.", { position: "top-center", autoClose: 3000, theme: "colored" });
+      }
+
     } else if (mode === 'owner_register') {
       // 3. OWNER REGISTER LOGIC: Check for slot details (now coordinates)
       const lat = parseFloat(formData.latitude);
       const lon = parseFloat(formData.longitude);
 
       if (!formData.slotName || isNaN(lat) || isNaN(lon) || !formData.latitude || !formData.longitude) {
-        alert("Please fill in all charging slot details and ensure coordinates are valid numbers.");
+        // 💡 IMPROVEMENT: Use toast instead of alert for better UI
+        toast.warn("Please fill in all charging slot details and ensure coordinates are valid numbers.", { position: "top-center", autoClose: 3000, theme: "colored" });
         return;
       }
-      
-      console.log('Owner Register submitted:', { ...formData, latitude: lat, longitude: lon });
-      ownerRegister({ ...formData, latitude: lat, longitude: lon });
+
+      // 🐛 FIX: Owner payload includes account details + slot details + role
+      const ownerRegisterPayload = {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        slotName: formData.slotName,
+        latitude: lat,
+        longitude: lon,
+        role: 'Owner' // Assuming this is passed to the backend
+      };
+
+      console.log('Owner Register submitted:', ownerRegisterPayload);
+
+      // Call the prop function, which should handle the API call and navigation
+      // ownerRegister(ownerRegisterPayload);
+
+      // 💡 NOTE: The API call and success/error handling for the owner are assumed to be
+      // managed by the 'ownerRegister' prop function, which is cleaner architecture.
+      // If you wanted to do the API call here, you would replicate the structure from user_register.
     }
   };
 
   return (
     <div className="auth-container">
-      
+
       {/* 1. DotGrid Background */}
       <div className="dot-grid-wrapper">
         <DotGrid
           dotSize={10}
           gap={15}
-          baseColor="#1A202C" 
-          activeColor="#39FF14" 
+          baseColor="#1A202C"
+          activeColor="#39FF14"
           proximity={120}
           shockRadius={250}
           shockStrength={5}
@@ -78,15 +200,15 @@ function Auth({ userRegister, ownerRegister }) {
         </p>
 
         <form className="auth-form" onSubmit={handleSubmit}>
-          
+
           {/* 🟢 OWNER REGISTER MODE: 2-COLUMN GRID */}
           {isOwnerRegisterMode ? (
             <div className="owner-form-grid">
-              
+
               {/* === COLUMN 1: Account Credentials === */}
               <div className="auth-col">
                 <div className="form-divider-secondary">Account Details</div>
-                
+
                 {/* Username Input */}
                 <div>
                   <input
@@ -126,11 +248,11 @@ function Auth({ userRegister, ownerRegister }) {
                   />
                 </div>
               </div>
-              
+
               {/* === COLUMN 2: E-Charging Slot Details === */}
               <div className="auth-col">
                 <div className="form-divider-secondary">Slot Details</div>
-                
+
                 {/* Slot Name Input */}
                 <div>
                   <input
@@ -147,11 +269,11 @@ function Auth({ userRegister, ownerRegister }) {
                 {/* Latitude Input */}
                 <div>
                   <input
-                    type="number" 
+                    type="number"
                     name="latitude"
                     placeholder="Latitude (e.g., 28.6139)"
                     required
-                    step="any" 
+                    step="any"
                     className="auth-input"
                     value={formData.latitude}
                     onChange={handleChange}
@@ -161,11 +283,11 @@ function Auth({ userRegister, ownerRegister }) {
                 {/* Longitude Input */}
                 <div>
                   <input
-                    type="number" 
+                    type="number"
                     name="longitude"
                     placeholder="Longitude (e.g., 77.2090)"
                     required
-                    step="any" 
+                    step="any"
                     className="auth-input"
                     value={formData.longitude}
                     onChange={handleChange}
@@ -183,7 +305,7 @@ function Auth({ userRegister, ownerRegister }) {
                   type="text"
                   name="username"
                   placeholder="Username"
-                  required={mode !== 'login'} 
+                  required
                   className="auth-input"
                   value={formData.username}
                   onChange={handleChange}
@@ -193,7 +315,7 @@ function Auth({ userRegister, ownerRegister }) {
               {/* Email (User Register Mode) */}
               {mode === 'user_register' && (
                 <div>
-                  
+
                   <input
                     type="email"
                     name="email"
@@ -220,7 +342,7 @@ function Auth({ userRegister, ownerRegister }) {
 
             </>
           )}
-          
+
           {/* Submit Button (outside the grid) */}
           <button type="submit" className="auth-button">
             {mode === 'login' ? 'Login' : 'Submit Registration'}
@@ -232,8 +354,8 @@ function Auth({ userRegister, ownerRegister }) {
           {/* Back to Login link */}
           {mode !== 'login' && (
             <p>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="toggle-button"
                 onClick={() => setMode('login')}
               >
@@ -249,16 +371,16 @@ function Auth({ userRegister, ownerRegister }) {
                 Don't have an account? Choose a role to register:
               </p>
               <div className="register-options">
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="toggle-button"
                   onClick={() => setMode('user_register')}
                 >
                   Register as User
                 </button>
                 <span className="toggle-separator"> | </span>
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="toggle-button"
                   onClick={() => setMode('owner_register')}
                 >
@@ -267,13 +389,13 @@ function Auth({ userRegister, ownerRegister }) {
               </div>
             </>
           )}
-          
+
           {/* Switching between registration types */}
           {isRegisterMode && (
             <p>
               Switch to:
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="toggle-button"
                 onClick={() => setMode(isOwnerRegisterMode ? 'user_register' : 'owner_register')}
               >
@@ -283,6 +405,17 @@ function Auth({ userRegister, ownerRegister }) {
           )}
         </div>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored" />
     </div>
   );
 }

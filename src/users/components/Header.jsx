@@ -2,7 +2,7 @@ import React from 'react'
 import { useLocation } from 'react-router-dom'; // 🛑 NEW: Import useLocation hook
 
 import PillNav from '../../bits/components/PillNav ';
-import logo from '../../assets/SlotMySocket.png';
+import logo from '../../assets/Logo.png';
 
 function Header() {
     // 🛑 FIX: Call useLocation here to get the current path
@@ -12,7 +12,7 @@ function Header() {
     return ( 
         <>
             <PillNav
-                logo={logo}
+//                 logo={logo}
                 logoAlt="Company Logo"
                 items={[
                     { label: 'Home', href: '/' },

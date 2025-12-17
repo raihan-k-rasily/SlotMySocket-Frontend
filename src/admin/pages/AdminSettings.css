@@ -1,0 +1,464 @@
+/* ================================================= */
+/* PROFILE CARD STYLING */
+/* ================================================= */
+
+/* Profile Card Base (Dark, Glassy Look) */
+.profile-card-base {
+    background: linear-gradient(
+        135deg,
+        rgba(20, 20, 20, 0.9), /* Dark Card BG */
+        rgba(25, 25, 25, 0.8)
+    );
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--admin-border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--admin-text); /* Ensure text is light */
+}
+
+/* Edit Profile Button (Yellow Accent) */
+.edit-profile-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(135deg, #facc15, #f59e0b) !important; /* Yellow/Warning */
+    color: var(--admin-bg-dark) !important;
+    padding: 8px;
+    border-radius: 999px;
+    box-shadow: 0 4px 10px rgba(250, 204, 21, 0.4);
+    transition: all 0.2s ease;
+}
+
+.edit-profile-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Dark Input Styling (Applied via .dark-input class in JSX) */
+.dark-input input {
+    /* Flowbite TextInput uses a nested input, target it specifically */
+    background-color: var(--admin-bg-dark) !important;
+    border-color: var(--admin-border) !important;
+    color: var(--admin-text) !important;
+    transition: border-color 0.2s;
+}
+
+.dark-input input:focus {
+    border-color: var(--admin-primary) !important;
+    box-shadow: 0 0 0 3px rgba(57, 255, 172, 0.2) !important;
+}
+
+/* Profile Info Text Section */
+.profile-info-section {
+    color: var(--admin-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Update Button (Green Accent) */
+.btn-update-profile {
+    background: linear-gradient(135deg, #22c55e, #16a34a) !important; /* Success Green */
+    color: var(--admin-bg-dark) !important;
+    font-weight: 700 !important;
+    padding: 8px 20px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 6px 15px rgba(34, 197, 94, 0.4);
+}
+
+.btn-update-profile:hover {
+    transform: translateY(-1px);
+}
+
+/* Reset Button (Orange Accent) */
+.btn-reset {
+    background: linear-gradient(135deg, #f97316, #ea580c) !important; /* Orange/Danger */
+    color: var(--admin-text) !important;
+    font-weight: 700 !important;
+    padding: 8px 20px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 6px 15px rgba(249, 115, 22, 0.3);
+}
+
+.btn-reset:hover {
+    transform: translateY(-1px);
+}
+
+/* SETTINGS TABS LAYOUT FIX */
+
+
+/* Left tab list */
+.settings-tabs-container [role="tablist"] {
+  min-width: 220px;
+  /* border-right: 1px solid var(--admin-border); */
+  padding-right: 20px;
+}
+
+/* Right content panel */
+.settings-tabs-container [role="tabpanel"] {
+  flex: 1;
+}
+
+/* FIX TAB BUTTON ALIGNMENT */
+.settings-tabs-container button {
+  justify-content: flex-start !important;
+  gap: 10px;
+  font-weight: 700;
+}
+
+.dark-input input,
+.dark-input input:focus-visible {
+  background-color: var(--admin-bg-dark) !important;
+  border-color: var(--admin-border) !important;
+  color: var(--admin-text) !important;
+}
+
+/* ================================ */
+/* PREMIUM SETTINGS PILLS */
+/* ================================ */
+
+
+
+/* LEFT TAB LIST */
+.premium-settings-tabs [role="tablist"] {
+  background: rgba(20, 20, 20, 0.85);
+  border-radius: 18px;
+  padding: 16px;
+  min-width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.06),
+    0 15px 40px rgba(0,0,0,0.6);
+}
+
+/* TAB BUTTON */
+.premium-settings-tabs button {
+  border-radius: 14px !important;
+  padding: 14px 18px !important;
+  font-weight: 800 !important;
+  font-size: 0.9rem;
+  color: var(--admin-muted) !important;
+  background: transparent !important;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.25s ease;
+}
+
+/* HOVER */
+.premium-settings-tabs button:hover {
+  background: rgba(57,255,172,0.12) !important;
+  color: var(--admin-primary) !important;
+}
+
+/* ACTIVE */
+.premium-settings-tabs button[aria-selected="true"] {
+  background: linear-gradient(135deg, #39ffac, #22d3ee) !important;
+  color: #000 !important;
+  box-shadow:
+    0 0 25px rgba(57,255,172,0.6),
+    0 10px 25px rgba(0,0,0,0.6);
+}
+
+/* RIGHT CONTENT */
+.premium-settings-tabs [role="tabpanel"] {
+  flex: 1;
+}
+/* SETTINGS GRID */
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+
+@media (min-width: 768px) {
+  .settings-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.profile-image-wrapper {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.profile-image-wrapper img {
+  width: 96px;
+  height: 96px;
+  border-radius: 999px;
+  border: 4px solid var(--admin-primary);
+  box-shadow: 0 0 25px rgba(57,255,172,0.6);
+  object-fit: cover;
+}
+
+.profile-card-base {
+  background: linear-gradient(
+    135deg,
+    rgba(20,20,20,0.95),
+    rgba(30,30,30,0.9)
+  );
+  border-radius: 22px;
+  padding: 34px;
+  box-shadow:
+    0 20px 50px rgba(0,0,0,0.8),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+  border: 1px solid rgba(57,255,172,0.3);
+}
+
+.btn-update-profile:hover,
+.btn-reset:hover {
+  transform: translateY(-2px) scale(1.03);
+}
+
+.admin-horizontal-tabs {
+  width: 100%;
+}
+
+/* TAB LIST */
+.admin-horizontal-tabs [role="tablist"] {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  padding: 16px;
+  margin-bottom: 32px;
+
+  background: rgba(20, 20, 20, 0.85);
+  border-radius: 18px;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.06),
+    0 15px 40px rgba(0,0,0,0.6);
+}
+
+/* TAB BUTTON */
+.admin-horizontal-tabs button {
+  padding: 12px 22px !important;
+  border-radius: 14px !important;
+  font-weight: 800 !important;
+  font-size: 0.9rem;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: var(--admin-muted) !important;
+  background: transparent !important;
+
+  transition: all 0.25s ease;
+}
+
+/* HOVER */
+.admin-horizontal-tabs button:hover {
+  background: rgba(57,255,172,0.12) !important;
+  color: var(--admin-primary) !important;
+}
+
+/* ACTIVE TAB */
+.admin-horizontal-tabs button[aria-selected="true"] {
+  background: linear-gradient(135deg, #39ffac, #22d3ee) !important;
+  color: #000 !important;
+
+  box-shadow:
+    0 0 25px rgba(57,255,172,0.6),
+    0 10px 25px rgba(0,0,0,0.6);
+}
+
+/* TAB CONTENT */
+/* ONLY show active tab panel */
+.admin-horizontal-tabs [role="tabpanel"][aria-hidden="false"] {
+  display: flex;
+  justify-content: center;
+}
+
+/* HIDE inactive panels */
+.admin-horizontal-tabs [role="tabpanel"][aria-hidden="true"] {
+  display: none;
+}
+
+
+/* CONTENT WIDTH */
+.settings-panel-content {
+  width: 100%;
+  max-width: 1100px;
+}
+/* ================================ */
+/* PREMIUM PROFILE CARD */
+/* ================================ */
+
+.profile-card-base {
+  background: linear-gradient(
+    135deg,
+    rgba(18,18,18,0.95),
+    rgba(30,30,30,0.92)
+  );
+  border-radius: 26px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 420px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  border: 1px solid rgba(57,255,172,0.35);
+  box-shadow:
+    0 30px 70px rgba(0,0,0,0.85),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+/* AVATAR */
+.profile-avatar {
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.profile-avatar img {
+  width: 110px;
+  height: 110px;
+  border-radius: 999px;
+  object-fit: cover;
+
+  border: 4px solid var(--admin-primary);
+  box-shadow:
+    0 0 35px rgba(57,255,172,0.75);
+}
+
+/* EDIT BUTTON */
+.edit-profile-btn {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+
+  background: linear-gradient(135deg, #facc15, #f59e0b) !important;
+  color: #000 !important;
+
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 8px 18px rgba(250,204,21,0.6);
+  transition: transform 0.2s ease;
+}
+
+.edit-profile-btn:hover {
+  transform: scale(1.1);
+}
+
+/* NAME */
+.profile-name {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--admin-text);
+  margin-top: 10px;
+}
+
+.profile-role {
+  font-size: 0.85rem;
+  color: var(--admin-muted);
+  margin-bottom: 26px;
+}
+
+/* FORM */
+.profile-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ACTION BUTTONS */
+.profile-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+/* BUTTON POLISH */
+.btn-update-profile {
+  flex: 1;
+  background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+  color: #000 !important;
+  font-weight: 800 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 10px 25px rgba(34,197,94,0.45);
+}
+
+.btn-reset {
+  flex: 1;
+  background: linear-gradient(135deg, #f97316, #ea580c) !important;
+  color: #fff !important;
+  font-weight: 800 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 10px 25px rgba(249,115,22,0.35);
+}
+
+.btn-update-profile:hover,
+.btn-reset:hover {
+  transform: translateY(-2px) scale(1.04);
+}
+
+
+/* ================================ */
+/* PREMIUM ADMIN INPUT STYLE */
+/* ================================ */
+
+.dark-input {
+  width: 100%;
+}
+
+.dark-input input {
+  width: 100%;
+  height: 44px;
+
+  background: rgba(15, 15, 15, 0.9) !important;
+  color: var(--admin-text) !important;
+
+  border-radius: 10px !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+
+  padding: 0 14px !important;
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+/* PLACEHOLDER */
+.dark-input input::placeholder {
+  color: rgba(255,255,255,0.35);
+  font-weight: 500;
+}
+
+/* HOVER */
+.dark-input input:hover {
+  border-color: rgba(57,255,172,0.45) !important;
+}
+
+/* FOCUS */
+.dark-input input:focus {
+  outline: none !important;
+  border-color: var(--admin-primary) !important;
+
+  background: rgba(10, 10, 10, 0.95) !important;
+
+  box-shadow:
+    0 0 0 3px rgba(57,255,172,0.18),
+    0 10px 25px rgba(0,0,0,0.6) !important;
+}
+
+/* DISABLED */
+.dark-input input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

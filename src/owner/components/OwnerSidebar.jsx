@@ -1,20 +1,25 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import '../pages/AdminHome.css';
-import { LayoutGrid, UserCheck, Eye, Settings } from 'lucide-react';
+import '../pages/OwnerHome.css';
+// Changed icons to be more relevant to an Owner/Provider role
+import { Home, Zap, MapPin, Settings } from 'lucide-react'; 
 
 const navItems = [
-  { name: 'Dashboard', icon: LayoutGrid, path: '/adminhome' },
-  { name: 'Verification', icon: UserCheck, path: '/adminverification' },
-  { name: 'View', icon: Eye, path: '/adminview' },
-  { name: 'System Settings', icon: Settings, path: '/adminsettings' },
+  // Home for the Owner dashboard
+  { name: 'Dashboard', icon: Home, path: '/ownerhome' }, 
+  // Managing their own charging stations/sockets
+  { name: 'My Stations', icon: Zap, path: '/ownerstations' }, 
+  // Viewing booking/usage logs for their stations
+  // { name: 'Usage & Earnings', icon: MapPin, path: '/owner/earnings' }, 
+  // Owner-specific settings (profile, bank details, etc.)
+  { name: 'Owner Settings', icon: Settings, path: '/ownersettings' }, 
 ];
 
-function AdminSidebar() {
+function OwnerSidebar() {
   return (
     <nav className="admin-sidebar">
       <div className="sidebar-logo">
-        <span className="logo-text">SlotMySocket Admin</span>
+        <span className="logo-text">SlotMySocket Owner Portal</span> {/* Updated Text */}
       </div>
 
       <ul className="sidebar-menu">
@@ -42,4 +47,4 @@ function AdminSidebar() {
   );
 }
 
-export default AdminSidebar;
+export default OwnerSidebar

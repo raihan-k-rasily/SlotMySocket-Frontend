@@ -17,6 +17,11 @@ import AdminView from './admin/pages/AdminView'
 import AdminSettings from './admin/pages/AdminSettings'
 
 
+import OwnerHome from './owner/pages/OwnerHome'
+import OwnerStations from './owner/pages/OwnerStations'
+import OwnerSettings from './owner/pages/OwnerSettings'
+
+
 
 
 
@@ -52,6 +57,11 @@ function App() {
         <Route path='adminverification' element={<AdminVerification />} />
         <Route path='adminview' element={<AdminView />} />
         <Route path='adminsettings' element={<AdminSettings />} />
+
+        {/* OWNER */}
+        <Route path='ownerhome' element={<OwnerHome />} />
+        <Route path='ownerstations' element={<OwnerStations />} />
+        <Route path='ownersettings' element={<OwnerSettings />} />
 
       </Routes>
     </>

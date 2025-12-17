@@ -1,0 +1,302 @@
+/* Import Admin variables if not globally available */
+/*
+:root {
+    --admin-bg-dark: #0A0A0A;
+    --admin-primary-color: #39FFAC;
+    --admin-text-light: #F0F4F8;
+    --admin-text-muted: #888;
+    --admin-border-color: rgba(255, 255, 255, 0.08);
+    --admin-card-bg: #1A1A1A;
+}
+*/
+
+.station-group-container {
+    margin-bottom: 40px;
+}
+
+/* ================================================= */
+/* STATION HEADER CARD */
+/* ================================================= */
+
+/* HEADER CONTAINER */
+.station-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+/* TITLE */
+.admin-welcome-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--admin-text-light);
+  margin: 0;
+}
+
+/* BUTTON ICON FIX */
+.btn-add-station .icon-left {
+  margin-right: 8px;
+}
+
+.station-header-card {
+    /* Use the Card component from Flowbite, applying dark theme overrides */
+    background: linear-gradient(
+        135deg,
+        rgba(57, 255, 172, 0.1), /* Slight green tint */
+        rgba(26, 26, 26, 0.9)
+    ) !important;
+    border: 1px solid var(--admin-primary-color) !important;
+    padding: 24px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 20px rgba(57, 255, 172, 0.15);
+    margin-bottom: 20px;
+    color: var(--admin-text-light) !important;
+}
+
+.station-header-card h2, .station-header-card p {
+    color: inherit !important;
+}
+
+.station-name {
+    color: var(--admin-primary-color);
+}
+
+.station-location {
+    color: var(--admin-text-muted);
+}
+
+/* Add Slot Button (Top Right Action) */
+.btn-add-slot {
+    /* Flowbite Button uses a complex structure, use Tailwind utilities for gradient */
+    background: linear-gradient(135deg, #39FFAC, #1AA380) !important;
+    color: var(--admin-bg-dark) !important;
+    font-weight: 700 !important;
+    padding: 8px 18px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 10px rgba(57, 255, 172, 0.4);
+    transition: all 0.2s;
+}
+
+.btn-add-slot:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(57, 255, 172, 0.6);
+}
+
+/* ================================================= */
+/* SLOTS GRID & CARD */
+/* ================================================= */
+
+.slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.slot-card {
+    background-color: var(--admin-card-bg) !important;
+    border: 1px solid var(--admin-border-color) !important;
+    border-radius: 10px !important;
+    transition: all 0.3s ease;
+    padding: 20px !important;
+    color: var(--admin-text-light) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.slot-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(57, 255, 172, 0.4) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+}
+
+.slot-id {
+    color: var(--admin-primary-color);
+}
+
+.slot-details {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0 0 0;
+    border-top: 1px dashed var(--admin-border-color);
+    padding-top: 10px;
+}
+
+.slot-details li {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--admin-text-light);
+    margin-bottom: 5px;
+}
+
+.slot-details .icon {
+    margin-right: 8px;
+    color: var(--admin-primary-color);
+}
+
+/* Status Badges */
+.slot-badge span { /* Targeting the inner span of the Flowbite Badge */
+    font-weight: 600 !important;
+    text-transform: uppercase;
+}
+
+/* Slot Card Status Color Indicators (Subtle left border) */
+.slot-card.status-available { border-left: 5px solid #10B981 !important; } /* Green */
+.slot-card.status-charging { border-left: 5px solid #F59E0B !important; } /* Yellow/Orange */
+.slot-card.status-maintenance { border-left: 5px solid #EF4444 !important; } /* Red */
+
+/* Small Action Buttons */
+.slot-btn {
+    padding: 6px 8px !important;
+    border-radius: 6px !important;
+}
+
+.slot-btn.btn-edit {
+    background-color: var(--admin-card-bg) !important;
+    border: 1px solid var(--admin-text-muted) !important;
+    color: var(--admin-text-muted) !important;
+}
+
+.slot-btn.btn-edit:hover {
+    background-color: rgba(57, 255, 172, 0.1) !important;
+    border-color: var(--admin-primary-color) !important;
+    color: var(--admin-primary-color) !important;
+}
+.slot-btn.btn-delete {
+    background-color: rgba(239, 68, 68, 0.2) !important;
+    border-color: #EF4444 !important;
+}
+
+.slot-btn.btn-delete:hover {
+    background-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+
+
+/* ================================================= */
+/* PREMIUM OWNER STATIONS STYLES */
+/* ================================================= */
+
+.station-group-container {
+    margin-bottom: 30px;
+}
+
+/* --- ADD STATION BUTTON (NEW) --- */
+.btn-add-station {
+    /* Flowbite Button uses a complex structure, use Tailwind utilities for gradient */
+    background: var(--admin-primary-color) !important;
+    color: var(--admin-bg-dark) !important;
+    font-weight: 700 !important;
+    padding: 8px 18px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 10px rgba(57, 255, 172, 0.6);
+    transition: all 0.2s;
+    border: none;
+}
+
+.btn-add-station:hover {
+    background: #5AFCA9 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(57, 255, 172, 0.8);
+}
+
+/* ================================================= */
+/* MASTER STATION CARD (Collapsible Container) */
+/* ================================================= */
+
+.station-master-card {
+    background-color: var(--admin-card-bg) !important;
+    border: 1px solid var(--admin-border-color) !important;
+    border-radius: 16px !important; /* Slightly more rounded */
+    padding: 0 !important; /* Remove Flowbite padding to control children padding */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    transition: border-color 0.3s ease;
+}
+
+.station-master-card.station-open {
+    border-color: var(--admin-primary-color) !important;
+    box-shadow: 0 0 0 1px var(--admin-primary-color), 0 10px 30px rgba(57, 255, 172, 0.15);
+}
+
+.station-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 30px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.station-card-header:hover {
+    background-color: rgba(255, 255, 255, 0.02); /* Subtle hover effect */
+}
+
+.station-name {
+    color: var(--admin-primary-color);
+}
+
+.station-location {
+    color: var(--admin-text-muted);
+}
+
+/* Add Slot Button (Inside Header) */
+.btn-add-slot {
+    background: rgba(57, 255, 172, 0.15) !important;
+    color: var(--admin-primary-color) !important;
+    border: 1px solid var(--admin-primary-color) !important;
+    font-weight: 600 !important;
+    padding: 6px 15px !important;
+    border-radius: 6px !important;
+    transition: all 0.2s;
+}
+
+.btn-add-slot:hover {
+    background: rgba(57, 255, 172, 0.3) !important;
+}
+
+/* --- SLOTS COLLAPSIBLE CONTENT --- */
+
+/* Wrapper for premium visual separation */
+.slots-collapse-wrapper {
+    padding: 0 30px 30px 30px; /* Padding for the entire collapsible area */
+    border-top: 1px solid var(--admin-border-color);
+    background-color: rgba(0, 0, 0, 0.15); /* Slightly darker background for content area */
+    border-radius: 0 0 16px 16px;
+    margin-top: 0 !important;
+}
+
+.slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding-top: 20px; /* Space above the first slot card */
+}
+
+/* ================================================= */
+/* SLOTS CARD (Unchanged, but keeping for reference) */
+/* ================================================= */
+
+.slot-card {
+    /* ... existing SlotCard styles remain ... */
+    background-color: var(--admin-card-bg) !important;
+    border: 1px solid var(--admin-border-color) !important;
+    border-radius: 10px !important;
+    transition: all 0.3s ease;
+    padding: 20px !important;
+    color: var(--admin-text-light) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.slot-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(57, 255, 172, 0.4) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+}
+
+/* Status Indicators */
+.slot-card.status-available { border-left: 5px solid #10B981 !important; }
+.slot-card.status-charging { border-left: 5px solid #F59E0B !important; }
+.slot-card.status-maintenance { border-left: 5px solid #EF4444 !important; }
+
+/* ... other SlotCard styles ... */

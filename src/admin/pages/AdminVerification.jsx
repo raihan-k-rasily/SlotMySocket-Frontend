@@ -9,10 +9,32 @@ import './AdminVerification.css';
 /* ------------------ DUMMY DATA ------------------ */
 
 const DUMMY_OWNERS = [
-  { id: 101, name: 'Alice Smith', email: 'alice@example.com', status: 'Pending' },
-  { id: 102, name: 'Bob Johnson', email: 'bob@example.com', status: 'Pending' },
-  { id: 103, name: 'Charlie Day', email: 'charlie@example.com', status: 'Verified' }
+  {
+    id: 101,
+    name: 'Alice Smith',
+    email: 'alice@example.com',
+    slotname: 'Main Street Station',
+    coordinates: '10.0159, 76.3419',
+    status: 'Pending'
+  },
+  {
+    id: 102,
+    name: 'Bob Johnson',
+    email: 'bob@example.com',
+    slotname: 'West End Hub',
+    coordinates: '10.0221, 76.3562',
+    status: 'Pending'
+  },
+  {
+    id: 103,
+    name: 'Charlie Day',
+    email: 'charlie@example.com',
+    slotname: 'University Campus',
+    coordinates: '10.0284, 76.3291',
+    status: 'Rejected'
+  }
 ];
+
 
 const DUMMY_SLOTS = [
   { id: 'SLOT001', location: 'Main Street Station', status: 'Active', usage: '50%' },
@@ -45,10 +67,6 @@ function AdminVerification() {
       <div className="admin-main-wrapper">
         <AdminHeader />
 
-        // AdminVerification.jsx
-
-// ... (Rest of the component remains the same)
-
         <main className="admin-main-content">
           <h1 className="admin-page-title">Verification & Resource Status</h1>
 
@@ -71,23 +89,26 @@ function AdminVerification() {
                     <Card className="owner-card-base">
                       <div className="card-header">
                         <h5 className="card-title">{owner.name}</h5>
-                        <Badge className={`badge badge-${owner.status === 'Pending' ? 'warning' : 'success'}`}>
+                        <Badge className={`badge badge-${owner.status === 'Pending' ? 'warning' : owner.status === 'Rejected' ? 'failure' : 'success'}`}>
                           {owner.status}
                         </Badge>
                       </div>
 
-                      <div className="card-details">
+                      <div className="card-details vertical">
                         <p><strong>ID:</strong> {owner.id}</p>
                         <p><strong>Email:</strong> {owner.email}</p>
+                        <p><strong>Slot Name:</strong> {owner.slotname}</p>
+                        <p><strong>Coordinates:</strong> {owner.coordinates}</p>
                       </div>
 
                       {owner.status === 'Pending' && (
                         <div className="card-actions">
-                          <Button size="xs" className="btn-view">View</Button>
                           <Button size="xs" className="btn-approve">Approve</Button>
+                          <Button size="xs" className="btn-reject">Reject</Button>
                         </div>
                       )}
                     </Card>
+
                   </motion.div>
                 ))}
               </motion.div>
@@ -121,11 +142,13 @@ function AdminVerification() {
                       </div>
 
                       <div className="card-actions">
-                        <Button size="sm" className="btn-details">View Details</Button>
+                        <Button size="xs" className="btn-approve">Approve</Button>
+                        <Button size="xs" className="btn-reject">Reject</Button>
                       </div>
                     </Card>
                   </motion.div>
                 ))}
+
               </motion.div>
             </TabItem>
           </Tabs>

@@ -365,3 +365,40 @@ body {
   transform: translateY(-2px) scale(1.05);
   box-shadow: 0 0 28px rgba(239,68,68,0.9);
 }
+
+/* ================================ */
+/* SUSPEND BUTTON — FINAL FIX */
+/* ================================ */
+
+.btn-suspend {
+  background: linear-gradient(135deg, #facc15, #f59e0b) !important;
+  color: white !important;
+  border-radius: 999px !important;
+  padding: 8px 22px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.4px;
+  box-shadow:
+    0 0 18px rgba(250,204,21,0.6),
+    0 6px 18px rgba(0,0,0,0.6);
+  transition: all 0.25s ease;
+}
+
+/* 🔥 TARGET FLOWBITE INTERNAL SPAN */
+.btn-suspend span {
+  color: white !important;
+  transition: color 0.25s ease;
+}
+
+/* HOVER */
+.btn-suspend:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: linear-gradient(135deg, #1a1a1a, #0f0f0f) !important;
+  box-shadow:
+    0 0 30px rgba(250,204,21,0.9),
+    0 8px 24px rgba(0,0,0,0.8);
+}
+
+/* 🔥 TEXT COLOR FIX */
+.btn-suspend:hover span {
+  color: #facc15 !important; /* YELLOW TEXT */
+}
