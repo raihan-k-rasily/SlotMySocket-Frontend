@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import '../pages/AdminHome.css';
-import { LayoutGrid, UserCheck, Eye, Settings } from 'lucide-react';
+import { LayoutGrid, UserCheck, Eye, Settings, Sun, Moon } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext'; // Import the hook
 
 const navItems = [
   { name: 'Dashboard', icon: LayoutGrid, path: '/adminhome' },
@@ -11,6 +11,8 @@ const navItems = [
 ];
 
 function AdminSidebar() {
+  const { theme, toggleTheme } = useTheme(); // Use global theme logic
+
   return (
     <nav className="admin-sidebar">
       <div className="sidebar-logo">
@@ -22,13 +24,9 @@ function AdminSidebar() {
           <li key={name} className="menu-item">
             <NavLink
               to={path}
-              className={({ isActive }) =>
-                `menu-link ${isActive ? 'active' : ''}`
-              }
+              className={({ isActive }) => `menu-link ${isActive ? 'active' : ''}`}
             >
-              <span className="menu-icon">
-                <Icon size={20} />
-              </span>
+              <span className="menu-icon"><Icon size={20} /></span>
               <span className="menu-text">{name}</span>
             </NavLink>
           </li>
@@ -36,6 +34,14 @@ function AdminSidebar() {
       </ul>
 
       <div className="sidebar-footer">
+        {/* Toggle Button placed on top of Logout */}
+        <button className="theme-toggle-btn" onClick={toggleTheme}>
+          {theme === 'dark' ? (
+            <><Sun size={18} /> Light Mode</>
+          ) : (
+            <><Moon size={18} /> Dark Mode</>
+          )}
+        </button>
         <button className="logout-button">🚪 Logout</button>
       </div>
     </nav>

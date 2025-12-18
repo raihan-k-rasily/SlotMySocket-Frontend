@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 // ⚠️ ASSUMPTION & FIX: Importing necessary items:
 // 1. You need your API functions.
 // 2. You need the toast library (e.g., react-toastify).
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import { loginAPI, registerUserAPI } from '../services/allAPIs'; // <-- FIX: Assuming this path
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -79,8 +79,9 @@ function Auth({ userRegister, ownerRegister }) {
 
           // Clear form data and navigate
           clearFormData();
+          response.data?.user?.role
 
-          if (response.data?.user?.role === "Bookstore Admin") {
+          if (response.data?.user?.role === "Admin") {
             setTimeout(() => { navigate("/adminhome"); }, 4000);
           } else {
             setTimeout(() => { navigate("/"); }, 4000);
@@ -118,7 +119,7 @@ function Auth({ userRegister, ownerRegister }) {
         console.log(response);
 
         if (response.status === 201) {
-          toast.success("Registration successfully", {
+          toast.success("Registered successfully", {
             position: "top-center", autoClose: 3000, hideProgressBar: false, closeOnClick: false,
             pauseOnHover: true, draggable: true, progress: undefined, theme: "colored",
           });
@@ -163,12 +164,6 @@ function Auth({ userRegister, ownerRegister }) {
 
       console.log('Owner Register submitted:', ownerRegisterPayload);
 
-      // Call the prop function, which should handle the API call and navigation
-      // ownerRegister(ownerRegisterPayload);
-
-      // 💡 NOTE: The API call and success/error handling for the owner are assumed to be
-      // managed by the 'ownerRegister' prop function, which is cleaner architecture.
-      // If you wanted to do the API call here, you would replicate the structure from user_register.
     }
   };
 
@@ -300,20 +295,6 @@ function Auth({ userRegister, ownerRegister }) {
             /* --- FALLBACK: Standard 1-column layout for Login/User Register --- */
             <>
               {/* Username Input */}
-              <div>
-                <input
-                  type="text"
-                  name="username"
-                  placeholder="Username"
-                  required
-                  className="auth-input"
-                  value={formData.username}
-                  onChange={handleChange}
-                />
-              </div>
-
-              {/* Email (User Register Mode) */}
-              {mode === 'user_register' && (
                 <div>
 
                   <input
@@ -326,6 +307,20 @@ function Auth({ userRegister, ownerRegister }) {
                     onChange={handleChange}
                   />
                 </div>
+
+              {/* Email (User Register Mode) */}
+              {mode === 'user_register' && (
+              <div>
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="Username"
+                  required
+                  className="auth-input"
+                  value={formData.username}
+                  onChange={handleChange}
+                />
+              </div>
               )}
               {/* Password Input */}
               <div>

@@ -1,5 +1,16 @@
 @import "tailwindcss";
+/* Add this to your global styles */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* This prevents the sidebar from jumping when the page loads */
+.admin-sidebar {
+    transition: background-color 0.3s ease, border-right 0.3s ease;
+}
+
 /* --- New Class for LUXURY Stack Card (Add to ScrollStack.css) --- */
+
 
 .lux-stack-card {
     /* Use the designated card fill color with slight transparency for depth */
