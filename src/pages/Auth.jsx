@@ -7,8 +7,9 @@ import { useNavigate } from 'react-router-dom';
 // 1. You need your API functions.
 // 2. You need the toast library (e.g., react-toastify).
 // import { toast } from 'react-toastify';
-import { loginAPI, registerUserAPI } from '../services/allAPIs'; // <-- FIX: Assuming this path
+import { loginAPI, registerUserAPI,GoogleloginUserAPI } from '../services/allAPIs'; // <-- FIX: Assuming this path
 import { ToastContainer, toast } from 'react-toastify';
+import { GoogleLogin } from '@react-oauth/google';
 
 // The component receives userRegister and ownerRegister functions (likely from a parent component)
 function Auth({ userRegister, ownerRegister }) {
@@ -47,6 +48,40 @@ function Auth({ userRegister, ownerRegister }) {
       longitude: '',
     });
   }
+  
+  //google login
+ const handleGoogleLogin = async (credentialResponse) => {
+    console.log("google login", credentialResponse);
+    const decode = jwtDecode(credentialResponse.credential);
+    console.log(decode);
+
+    const response = await GoogleloginUserAPI({
+      email: decode.email,
+      password: "google",
+      username: decode.name,
+      profile: decode.picture,
+    });
+    console.log(response);
+    if (response.status == 200) {
+      sessionStorage.setItem("userDetails", JSON.stringify(response.data.user));
+           sessionStorage.setItem(
+            "token",
+            JSON.stringify(response.data.token));
+      toast.success("Login successfully", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      setTimeout(() => {
+        navigate("/");
+      }, 4000);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -342,6 +377,21 @@ function Auth({ userRegister, ownerRegister }) {
           <button type="submit" className="auth-button">
             {mode === 'login' ? 'Login' : 'Submit Registration'}
           </button>
+          <br />
+          <br />
+          <div>
+              <GoogleLogin 
+              onClick={()=>handleGoogleLogin(credentialResponse)}
+                onSuccess={credentialResponse => {
+                  console.log(credentialResponse);
+                  handleGoogleLogin(credentialResponse)
+                  // credentialResponce decode => JWT DECODE
+                }}
+                onError={() => {
+                  console.log('Login Failed');
+                }}
+              />
+            </div>
         </form>
 
         {/* Toggle between Login and Signup */}
