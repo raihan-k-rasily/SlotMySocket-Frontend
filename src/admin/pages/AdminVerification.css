@@ -210,7 +210,7 @@ body {
 }
 
 .btn-view,
-.btn-approve,
+.btn-accept,
 .btn-details {
   border-radius: 999px !important;
   padding: 8px 20px !important;
@@ -232,12 +232,12 @@ body {
   box-shadow: 0 0 22px rgba(167,139,250,0.7);
 }
 
-.btn-approve {
+.btn-accept {
   background: linear-gradient(135deg, #22c55e, #16a34a) !important;
   color: #000 !important;
 }
 
-.btn-approve:hover {
+.btn-accept:hover {
   transform: translateY(-2px);
   box-shadow: 0 0 22px rgba(34,197,94,0.8);
 }
@@ -331,7 +331,7 @@ body {
   font-size: 0.95rem;
 }
 
-.btn-approve {
+.btn-accept {
   background: linear-gradient(135deg, #22c55e, #16a34a) !important;
   color: #000 !important;
   border-radius: 999px !important;
@@ -343,9 +343,10 @@ body {
   transition: all 0.25s ease;
 }
 
-.btn-approve:hover {
+.btn-accept:hover {
   transform: translateY(-2px) scale(1.05);
   box-shadow: 0 0 28px rgba(34,197,94,0.9);
+  color: rgba(34,197,94,0.9) !important;
 }
 
 /* REJECT BUTTON */
@@ -364,4 +365,8 @@ body {
 .btn-reject:hover {
   transform: translateY(-2px) scale(1.05);
   box-shadow: 0 0 28px rgba(239,68,68,0.9);
+  color: #ff4d4d !important;
+}
+.btn-reject:hover span {
+  color: #ff4d4d !important; /* YELLOW TEXT */
 }

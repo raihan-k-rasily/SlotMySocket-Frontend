@@ -14,7 +14,7 @@ createRoot(document.getElementById('root')).render(
         <ThemeProvider>
           <App />
         </ThemeProvider>
-      </GoogleOAuthProvider>;
+      </GoogleOAuthProvider>
     </BrowserRouter>
   </StrictMode>
 )

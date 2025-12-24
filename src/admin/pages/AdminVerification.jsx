@@ -1,159 +1,138 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminHeader from '../components/AdminHeader';
 import AdminSidebar from '../components/AdminSidebar';
 import Footer from '../../components/Footer';
-import { Tabs, TabItem, Card, Badge, Button } from 'flowbite-react';
+import { Tabs, TabItem, Card, Badge, Button, Spinner } from 'flowbite-react';
 import { motion } from 'framer-motion';
+import { getPendingStationsAPI, updateStationStatusAPI } from '../../services/allAPIs'; // Import your API
+import { toast } from 'react-toastify';
 import './AdminVerification.css';
 
-/* ------------------ DUMMY DATA ------------------ */
-
-const DUMMY_OWNERS = [
-  {
-    id: 101,
-    name: 'Alice Smith',
-    email: 'alice@example.com',
-    slotname: 'Main Street Station',
-    coordinates: '10.0159, 76.3419',
-    status: 'Pending'
-  },
-  {
-    id: 102,
-    name: 'Bob Johnson',
-    email: 'bob@example.com',
-    slotname: 'West End Hub',
-    coordinates: '10.0221, 76.3562',
-    status: 'Pending'
-  },
-  {
-    id: 103,
-    name: 'Charlie Day',
-    email: 'charlie@example.com',
-    slotname: 'University Campus',
-    coordinates: '10.0284, 76.3291',
-    status: 'Rejected'
-  }
-];
-
-
-const DUMMY_SLOTS = [
-  { id: 'SLOT001', location: 'Main Street Station', status: 'Active', usage: '50%' },
-  { id: 'SLOT002', location: 'West End Hub', status: 'Fault', usage: '0%' },
-  { id: 'SLOT003', location: 'University Campus', status: 'Active', usage: '90%' }
-];
-
-/* ------------------ MOTION ------------------ */
 
 const containerVariants = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.08 } }
+  show: { opacity: 1, transition: { staggerChildren: 0.1 } }
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20, scale: 0.95 },
-  show: { opacity: 1, y: 0, scale: 1 }
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 }
 };
 
-/* ------------------ COMPONENT ------------------ */
-
 function AdminVerification() {
-  const [owners] = useState(DUMMY_OWNERS);
-  const [slots] = useState(DUMMY_SLOTS);
+  const [pendingStations, setPendingStations] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // 1. Fetch Real Data from Backend
+  const fetchPendingStations = async () => {
+    setLoading(true);
+    const token = sessionStorage.getItem("token");
+    
+    if (token) {
+      const updatedToken = token.replace(/"/g, "");
+      const reqHeader = {
+        "Authorization": `Bearer ${updatedToken}`
+      };
+
+      try {
+        const response = await getPendingStationsAPI(reqHeader);
+        if (response.status === 200) {
+          setPendingStations(response.data);
+        }
+      } catch (error) {
+        console.error("Fetch Error:", error);
+        toast.error("Failed to load pending requests");
+      }
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchPendingStations();
+  }, []);
+
+  const handleStatusUpdate = async (id, newStatus) => {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+        const updatedToken = token.replace(/"/g, "");
+        const reqHeader = {
+            "Authorization": `Bearer ${updatedToken}`
+        };
+
+        try {
+            // Send the status update to the backend
+            const response = await updateStationStatusAPI(id, { status: newStatus }, reqHeader);
+
+            if (response.status === 200) {
+                toast.success(`Station ${newStatus === 'APPROVED' ? 'Accepted' : 'Rejected'}`);
+                
+                // Refresh the list immediately so the card disappears
+                fetchPendingStations(); 
+            }
+        } catch (error) {
+            console.error("Status Update Error:", error);
+            toast.error("Failed to update station status");
+        }
+    }
+};
 
   return (
     <div className="admin-dashboard-layout">
       <AdminSidebar />
-
       <div className="admin-main-wrapper">
         <AdminHeader />
 
         <main className="admin-main-content">
-          <h1 className="admin-page-title">Verification & Resource Status</h1>
+          <h1 className="admin-page-title">Verification Hub</h1>
 
           <Tabs variant="pills" className="premium-tabs">
+            <TabItem active title="Station Requests">
+              {loading ? (
+                <div className="flex justify-center p-10"><Spinner size="xl" /></div>
+              ) : (
+                <motion.div 
+                  className="owner-grid" 
+                  variants={containerVariants} 
+                  initial="hidden" 
+                  animate="show"
+                >
+                  {pendingStations.length > 0 ? (
+                    pendingStations.map((station) => (
+                      <motion.div key={station._id} className="owner-card-wrapper" variants={itemVariants}>
+                        <Card className="owner-card-base">
+                          <div className="card-header">
+                            <h5 className="card-title">{station.stationName}</h5>
+                            <Badge className="badge badge-warning">PENDING</Badge>
+                          </div>
 
-            <TabItem active title="Owner Verification">
-              <motion.div
-                className="owner-grid"
-                variants={containerVariants}
-                initial="hidden"
-                animate="show"
-              >
-                {owners.map(owner => (
-                  <motion.div
-                    key={owner.id}
-                    className="owner-card-wrapper"
-                    variants={itemVariants}
-                    whileHover={{ scale: 1.03 }}
-                  >
-                    <Card className="owner-card-base">
-                      <div className="card-header">
-                        <h5 className="card-title">{owner.name}</h5>
-                        <Badge className={`badge badge-${owner.status === 'Pending' ? 'warning' : owner.status === 'Rejected' ? 'failure' : 'success'}`}>
-                          {owner.status}
-                        </Badge>
-                      </div>
+                          <div className="card-details vertical">
+                            {/* Accessing populated ownerId data */}
+                            <p><strong>Owner:</strong> {station.ownerId?.username || 'Unknown'}</p>
+                            <p><strong>Email:</strong> {station.ownerId?.email || 'N/A'}</p>
+                            <p><strong>Location:</strong> {station.location?.address || 'View on Map'}</p>
+                          </div>
 
-                      <div className="card-details vertical">
-                        <p><strong>ID:</strong> {owner.id}</p>
-                        <p><strong>Email:</strong> {owner.email}</p>
-                        <p><strong>Slot Name:</strong> {owner.slotname}</p>
-                        <p><strong>Coordinates:</strong> {owner.coordinates}</p>
-                      </div>
-
-                      {owner.status === 'Pending' && (
-                        <div className="card-actions">
-                          <Button size="xs" className="btn-approve">Approve</Button>
-                          <Button size="xs" className="btn-reject">Reject</Button>
-                        </div>
-                      )}
-                    </Card>
-
-                  </motion.div>
-                ))}
-              </motion.div>
+                          <div className="card-actions">
+                            <Button size="xs" className="btn-accept" 
+                            onClick={() => handleStatusUpdate(station._id, 'APPROVED')}>Accept</Button>
+                            <Button size="xs" className="btn-reject"
+                            onClick={() => handleStatusUpdate(station._id, 'REJECTED')}><span>Reject</span></Button>
+                          </div>
+                        </Card>
+                      </motion.div>
+                    ))
+                  ) : (
+                    <p className="text-white text-center col-span-full opacity-50">No pending requests found.</p>
+                  )}
+                </motion.div>
+              )}
             </TabItem>
 
-            <TabItem title="Slot / Resource Status">
-              <motion.div
-                className="slot-grid"
-                variants={containerVariants}
-                initial="hidden"
-                animate="show"
-              >
-                {slots.map(slot => (
-                  <motion.div
-                    key={slot.id}
-                    className="slot-card-wrapper"
-                    variants={itemVariants}
-                    whileHover={{ scale: 1.03 }}
-                  >
-                    <Card className="slot-card-base">
-                      <div className="card-header">
-                        <h5 className="slot-id">{slot.id}</h5>
-                        <Badge className={`badge badge-${slot.status === 'Active' ? 'success' : 'failure'}`}>
-                          {slot.status}
-                        </Badge>
-                      </div>
-
-                      <div className="card-details">
-                        <p><strong>Location:</strong> {slot.location}</p>
-                        <p><strong>Usage:</strong> {slot.usage}</p>
-                      </div>
-
-                      <div className="card-actions">
-                        <Button size="xs" className="btn-approve">Approve</Button>
-                        <Button size="xs" className="btn-reject">Reject</Button>
-                      </div>
-                    </Card>
-                  </motion.div>
-                ))}
-
-              </motion.div>
-            </TabItem>
+            {/* <TabItem title="Live Status">
+                <p className="text-gray-400">Approved stations will appear here.</p>
+            </TabItem> */}
           </Tabs>
         </main>
-
         <Footer />
       </div>
     </div>

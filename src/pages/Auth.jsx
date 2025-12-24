@@ -7,9 +7,10 @@ import { useNavigate } from 'react-router-dom';
 // 1. You need your API functions.
 // 2. You need the toast library (e.g., react-toastify).
 // import { toast } from 'react-toastify';
-import { loginAPI, registerUserAPI,GoogleloginUserAPI } from '../services/allAPIs'; // <-- FIX: Assuming this path
+import { loginAPI, registerUserAPI, GoogleloginUserAPI, registerOwnerAPI } from '../services/allAPIs'; // <-- FIX: Assuming this path
 import { ToastContainer, toast } from 'react-toastify';
 import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode'
 
 // The component receives userRegister and ownerRegister functions (likely from a parent component)
 function Auth({ userRegister, ownerRegister }) {
@@ -24,7 +25,7 @@ function Auth({ userRegister, ownerRegister }) {
     email: '',
     password: '',
     // Owner specific fields
-    slotName: '',
+    stationName: '',
     latitude: '',
     longitude: '',
   });
@@ -43,14 +44,14 @@ function Auth({ userRegister, ownerRegister }) {
       username: '',
       email: '',
       password: '',
-      slotName: '',
+      stationName: '',
       latitude: '',
       longitude: '',
     });
   }
-  
+
   //google login
- const handleGoogleLogin = async (credentialResponse) => {
+  const handleGoogleLogin = async (credentialResponse) => {
     console.log("google login", credentialResponse);
     const decode = jwtDecode(credentialResponse.credential);
     console.log(decode);
@@ -60,13 +61,14 @@ function Auth({ userRegister, ownerRegister }) {
       password: "google",
       username: decode.name,
       profile: decode.picture,
+      role: "User"
     });
     console.log(response);
     if (response.status == 200) {
       sessionStorage.setItem("userDetails", JSON.stringify(response.data.user));
-           sessionStorage.setItem(
-            "token",
-            JSON.stringify(response.data.token));
+      sessionStorage.setItem(
+        "token",
+        JSON.stringify(response.data.token));
       toast.success("Login successfully", {
         position: "top-center",
         autoClose: 3000,
@@ -118,6 +120,17 @@ function Auth({ userRegister, ownerRegister }) {
 
           if (response.data?.user?.role === "Admin") {
             setTimeout(() => { navigate("/adminhome"); }, 4000);
+          } else if (response.data?.user?.role === "Owner") {
+            // Check if the user status is ACTIVE
+            if (response.data?.user?.status === "ACTIVE") {
+              toast.success("Login Successful! Redirecting to Owner Dashboard...");
+              setTimeout(() => {
+                navigate("/ownerhome");
+              }, 2000); // Reduced to 2s for better UX, change back to 4000 if preferred
+            } else {
+              // If status is BLOCKED or anything else
+              toast.error("Your account is currently inactive. Please contact the Admin.");
+            }
           } else {
             setTimeout(() => { navigate("/"); }, 4000);
           }
@@ -176,31 +189,76 @@ function Auth({ userRegister, ownerRegister }) {
       }
 
     } else if (mode === 'owner_register') {
-      // 3. OWNER REGISTER LOGIC: Check for slot details (now coordinates)
+      // 1. Convert to numbers
       const lat = parseFloat(formData.latitude);
       const lon = parseFloat(formData.longitude);
 
-      if (!formData.slotName || isNaN(lat) || isNaN(lon) || !formData.latitude || !formData.longitude) {
-        // 💡 IMPROVEMENT: Use toast instead of alert for better UI
-        toast.warn("Please fill in all charging slot details and ensure coordinates are valid numbers.", { position: "top-center", autoClose: 3000, theme: "colored" });
+      // 2. Simple validation
+      const isValidCoordinate = !isNaN(lat) && lat >= -90 && lat <= 90 &&
+        !isNaN(lon) && lon >= -180 && lon <= 180;
+
+      // Added check for basic fields to ensure nothing is empty
+      if (!formData.username || !formData.email || !formData.password || !formData.stationName || !isValidCoordinate) {
+        toast.warn("Please fill in all details and ensure coordinates are valid.", {
+          position: "top-center",
+          theme: "colored"
+        });
         return;
       }
 
-      // 🐛 FIX: Owner payload includes account details + slot details + role
+      // 3. Define the Payload
       const ownerRegisterPayload = {
         username: formData.username,
         email: formData.email,
         password: formData.password,
-        slotName: formData.slotName,
+        stationName: formData.stationName,
         latitude: lat,
         longitude: lon,
-        role: 'Owner' // Assuming this is passed to the backend
+        role: 'Owner'
       };
 
       console.log('Owner Register submitted:', ownerRegisterPayload);
 
+      try {
+        // 🐛 FIXED: Using ownerRegisterPayload correctly here
+        const response = await registerOwnerAPI(ownerRegisterPayload);
+        console.log(response);
+
+        if (response.status === 201) {
+          toast.success("Owner Registered successfully! Waiting for Admin approval.", {
+            position: "top-center",
+            autoClose: 3000,
+            theme: "colored",
+          });
+
+          clearFormData();
+
+          // Delay navigation so user can read the success message
+          setTimeout(() => {
+            navigate("/login");
+          }, 3500);
+
+        } else {
+          // Handle cases like 401 (User exists) or 409 (Location exists)
+          const errorMsg = response.response?.data?.message || "Registration failed.";
+          toast.error(errorMsg, {
+            position: "top-center",
+            autoClose: 3000,
+            theme: "colored",
+          });
+        }
+      } catch (error) {
+        console.log("Owner Registration Error:", error);
+        toast.error("Server error. Please try again later.", {
+          position: "top-center",
+          autoClose: 3000,
+          theme: "colored"
+        });
+      }
     }
   };
+
+
 
   return (
     <div className="auth-container">
@@ -226,7 +284,7 @@ function Auth({ userRegister, ownerRegister }) {
           {mode === 'login' ? 'Welcome Back' : (isOwnerRegisterMode ? 'Register as Owner' : 'Register as User')}
         </h2>
         <p className="auth-subheader">
-          {mode === 'login' ? 'Sign in to access your dashboard' : (isOwnerRegisterMode ? 'Create account and list your charging slot' : 'Create your user account')}
+          {mode === 'login' ? 'Sign in to access your dashboard' : (isOwnerRegisterMode ? 'Create account and list your charging Station' : 'Create your user account')}
         </p>
 
         <form className="auth-form" onSubmit={handleSubmit}>
@@ -279,19 +337,19 @@ function Auth({ userRegister, ownerRegister }) {
                 </div>
               </div>
 
-              {/* === COLUMN 2: E-Charging Slot Details === */}
+              {/* === COLUMN 2: E-Charging Station Details === */}
               <div className="auth-col">
-                <div className="form-divider-secondary">Slot Details</div>
+                <div className="form-divider-secondary">Station Details</div>
 
-                {/* Slot Name Input */}
+                {/* Station Name Input */}
                 <div>
                   <input
                     type="text"
-                    name="slotName"
-                    placeholder="Slot Name (e.g., Green Spot 1)"
+                    name="stationName"
+                    placeholder="Station Name (e.g., Green Spot 1)"
                     required
                     className="auth-input"
-                    value={formData.slotName}
+                    value={formData.stationName}
                     onChange={handleChange}
                   />
                 </div>
@@ -330,32 +388,32 @@ function Auth({ userRegister, ownerRegister }) {
             /* --- FALLBACK: Standard 1-column layout for Login/User Register --- */
             <>
               {/* Username Input */}
-                <div>
-
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    required
-                    className="auth-input"
-                    value={formData.email}
-                    onChange={handleChange}
-                  />
-                </div>
-
-              {/* Email (User Register Mode) */}
-              {mode === 'user_register' && (
               <div>
+
                 <input
-                  type="text"
-                  name="username"
-                  placeholder="Username"
+                  type="email"
+                  name="email"
+                  placeholder="Email"
                   required
                   className="auth-input"
-                  value={formData.username}
+                  value={formData.email}
                   onChange={handleChange}
                 />
               </div>
+
+              {/* Email (User Register Mode) */}
+              {mode === 'user_register' && (
+                <div>
+                  <input
+                    type="text"
+                    name="username"
+                    placeholder="Username"
+                    required
+                    className="auth-input"
+                    value={formData.username}
+                    onChange={handleChange}
+                  />
+                </div>
               )}
               {/* Password Input */}
               <div>
@@ -379,19 +437,21 @@ function Auth({ userRegister, ownerRegister }) {
           </button>
           <br />
           <br />
-          <div>
-              <GoogleLogin 
-              onClick={()=>handleGoogleLogin(credentialResponse)}
+          {
+            (mode === "user_register" || mode === "login") &&
+            <div>
+              <GoogleLogin
+                onClick={() => handleGoogleLogin(credentialResponse)}
                 onSuccess={credentialResponse => {
                   console.log(credentialResponse);
                   handleGoogleLogin(credentialResponse)
-                  // credentialResponce decode => JWT DECODE
                 }}
                 onError={() => {
                   console.log('Login Failed');
                 }}
               />
             </div>
+          }
         </form>
 
         {/* Toggle between Login and Signup */}

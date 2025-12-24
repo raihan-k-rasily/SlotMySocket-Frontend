@@ -1,42 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminHeader from '../components/AdminHeader';
 import AdminSidebar from '../components/AdminSidebar';
 import Footer from '../../components/Footer';
-import { Tabs, TabItem, Card, Badge, Button } from 'flowbite-react';
+import { Tabs, TabItem, Card, Badge, Spinner } from 'flowbite-react';
 import { motion } from 'framer-motion';
+import { getVerifiedStationsAPI, updateStationStatusAPI, getAllUsersAPI, updateUserStatusAPI } from '../../services/allAPIs';
+import { toast } from 'react-toastify';
 import './AdminView.css';
-
-/* ------------------ DUMMY DATA ------------------ */
-
-const DUMMY_OWNERS = [
-  {
-    id: 101,
-    name: 'Alice Smith',
-    email: 'alice@example.com',
-    status: 'Approved'
-  },
-  {
-    id: 102,
-    name: 'Bob Johnson',
-    email: 'bob@example.com',
-    status: 'Approved'
-  },
-  {
-    id: 103,
-    name: 'Charlie Day',
-    email: 'charlie@example.com',
-    status: 'Approved'
-  }
-];
-
-
-const DUMMY_SLOTS = [
-  { id: 'SLOT001', location: 'Main Street Station', status: 'Active', usage: '50%' },
-  { id: 'SLOT002', location: 'West End Hub', status: 'Fault', usage: '0%' },
-  { id: 'SLOT003', location: 'University Campus', status: 'Active', usage: '90%' }
-];
-
-/* ------------------ MOTION ------------------ */
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -48,72 +18,141 @@ const itemVariants = {
   show: { opacity: 1, y: 0, scale: 1 }
 };
 
-/* ------------------ COMPONENT ------------------ */
-
 function AdminView() {
-  const [owners] = useState(DUMMY_OWNERS);
-  const [slots] = useState(DUMMY_SLOTS);
+  const [stations, setStations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [allUsers, setAllUsers] = useState([]);
+
+  const fetchAllUsers = async () => {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      const reqHeader = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token.replace(/"/g, "")}`
+      };
+      try {
+        const response = await getAllUsersAPI(reqHeader);
+        if (response.status === 200) {
+          setAllUsers(response.data);
+        }
+      } catch (err) {
+        console.log("Error fetching users", err);
+      }
+    }
+  };
+  // 1. Fetch Stations where status is NOT PENDING
+  const fetchVerifiedStations = async () => {
+    setLoading(true);
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      const reqHeader = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token.replace(/"/g, "")}`
+      };
+      try {
+        const response = await getVerifiedStationsAPI(reqHeader);
+        if (response.status === 200) {
+          setStations(response.data);
+        }
+      } catch (err) {
+        toast.error("Error fetching station data");
+      }
+    }
+    setLoading(false);
+  };
+
+  // 2. Suspend/Change Status Function
+  const handleSuspend = async (id) => {
+    const token = sessionStorage.getItem("token");
+    const reqHeader = {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token.replace(/"/g, "")}`
+    };
+    try {
+      // Suspending usually means moving back to PENDING or a SUSPENDED status
+      const response = await updateStationStatusAPI(id, { status: "PENDING" }, reqHeader);
+      if (response.status === 200) {
+        toast.info("Station status updated");
+        fetchVerifiedStations(); // Refresh list
+      }
+    } catch (err) {
+      toast.error("Operation failed");
+    }
+  };
+
+
+  // 2. Suspend/Change Status Function
+  // AdminView.jsx
+  const handleBlockUser = async (id, currentStatus) => {
+    // Toggle logic: if ACTIVE, make it BLOCKED
+    const newStatus = currentStatus === "ACTIVE" ? "INACTIVE" : "ACTIVE";
+
+    const token = sessionStorage.getItem("token");
+    const reqHeader = {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token.replace(/"/g, "")}`
+    };
+
+    try {
+      // Ensure you pass the ID and the Object { status: ... }
+      const response = await updateUserStatusAPI(id, { status: newStatus }, reqHeader);
+      if (response.status === 200) {
+        toast.success("User status updated");
+        fetchAllUsers(); // Refresh the list
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  useEffect(() => {
+    fetchVerifiedStations();
+    fetchAllUsers();
+  }, []);
 
   return (
     <div className="admin-dashboard-layout">
       <AdminSidebar />
-
       <div className="admin-main-wrapper">
         <AdminHeader />
-
-        //  AdminView.jsx
-
-        // ... (Rest of the component remains the same)
-
         <main className="admin-main-content">
-          <h1 className="admin-page-title">Verification & Resource Status</h1>
+          <h1 className="admin-page-title">Verified Resource Management</h1>
 
           <Tabs variant="pills" className="premium-tabs">
-
-            <TabItem active title="Owner List">
-              <motion.div
-                className="owner-grid"
-                variants={containerVariants}
-                initial="hidden"
-                animate="show"
-              >
-                {owners.map(owner => (
-                  <motion.div
-                    key={owner.id}
-                    className="owner-card-wrapper"
-                    variants={itemVariants}
-                    whileHover={{ scale: 1.03 }}
-                  >{
-                      owner.status == 'Approved' &&
-
+            <TabItem active title="Station List">
+              {loading ? (
+                <div className="flex justify-center p-10"><Spinner size="xl" /></div>
+              ) : (
+                <motion.div className="owner-grid" variants={containerVariants} initial="hidden" animate="show">
+                  {stations.map(station => (
+                    <motion.div key={station._id} className="owner-card-wrapper" variants={itemVariants} whileHover={{ scale: 1.02 }}>
                       <Card className="owner-card-base">
                         <div className="card-header">
-                          <h5 className="card-title">{owner.name}</h5>
-                          <Badge className={`badge badge-${owner.status === 'Pending' ? 'warning' : owner.status === 'Rejected' ? 'failure' : 'success'}`}>
-                            {owner.status}
+                          <h5 className="card-title">{station.stationName}</h5>
+                          <Badge color={station.status === 'APPROVED' ? 'success' : 'failure'}>
+                            {station.status}
                           </Badge>
                         </div>
 
                         <div className="card-details vertical">
-                          <p><strong>ID:</strong> {owner.id}</p>
-                          <p><strong>Email:</strong> {owner.email}</p>
+                          {/* Displaying Populated Owner Details */}
+                          <p><strong>Owner:</strong> {station.ownerId?.username || 'N/A'}</p>
+                          <p><strong>Owner Email:</strong> {station.ownerId?.email || 'N/A'}</p>
+                          <p><strong>Address:</strong> {station.location?.address}</p>
                         </div>
 
                         <div className="card-actions">
-                          <button class="btn-suspend">
+                          <button className="btn-suspend" onClick={() => handleSuspend(station._id)}>
                             <span> Suspend </span>
                           </button>
-
                         </div>
                       </Card>
-                    }
-
-                  </motion.div>
-                ))}
-              </motion.div>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              )}
             </TabItem>
 
-            <TabItem title="Slot / Resource List">
+            {/* <TabItem title="Slot / Resource List">
               <motion.div
                 className="slot-grid"
                 variants={containerVariants}
@@ -154,49 +193,54 @@ function AdminView() {
                 ))}
 
               </motion.div>
-            </TabItem>
+            </TabItem> */}
+            <TabItem title="Users List">
+              {loading ? (
+                <div className="flex justify-center p-10"><Spinner size="xl" /></div>
+              ) : (
+                <motion.div
+                  className="owner-grid"
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="show"
+                >
+                  {allUsers.length > 0 ? (
+                    allUsers.map(user => (
+                      <motion.div
+                        key={user._id}
+                        className="owner-card-wrapper"
+                        variants={itemVariants}
+                      >
+                        <Card className="owner-card-base">
+                          <div className="card-header">
+                            <h5 className="card-title">{user.username}</h5>
+                            <Badge color={user.status === 'ACTIVE' ? 'success' : 'failure'}>
+                              {user.status}
+                            </Badge>
+                          </div>
 
-            <TabItem active title="Users List">
-              <motion.div
-                className="owner-grid"
-                variants={containerVariants}
-                initial="hidden"
-                animate="show"
-              >
-                {owners.map(owner => (
-                  <motion.div
-                    key={owner.id}
-                    className="owner-card-wrapper"
-                    variants={itemVariants}
-                    whileHover={{ scale: 1.03 }}
-                  >{
-                      owner.status == 'Approved' &&
+                          <div className="card-details vertical">
+                            <p><strong>Email:</strong> {user.email}</p>
+                            <p><strong>Role:</strong> {user.role}</p>
+                            <p><strong>Joined:</strong> {new Date(user.createdAt).toLocaleDateString()}</p>
+                          </div>
 
-                      <Card className="owner-card-base">
-                        <div className="card-header">
-                          <h5 className="card-title">{owner.name}</h5>
-                          <Badge className={`badge badge-${owner.status === 'Pending' ? 'warning' : owner.status === 'Rejected' ? 'failure' : 'success'}`}>
-                            {owner.status}
-                          </Badge>
-                        </div>
-
-                        <div className="card-details vertical">
-                          <p><strong>ID:</strong> {owner.id}</p>
-                          <p><strong>Email:</strong> {owner.email}</p>
-                        </div>
-
-                        <div className="card-actions">
-                          <button class="btn-suspend">
-                            <span> Suspend </span>
-                          </button>
-
-                        </div>
-                      </Card>
-                    }
-
-                  </motion.div>
-                ))}
-              </motion.div>
+                          <div className="card-actions">
+                            <button
+                              onClick={() => handleBlockUser(user._id, user.status)} // Pass user.status here
+                              className={user.status === "ACTIVE" ? "btn-suspend" : "btn-approve"}
+                            >
+                              <span> {user.status === "ACTIVE" ? "Block User" : "Unblock User"} </span>
+                            </button>
+                          </div>
+                        </Card>
+                      </motion.div>
+                    ))
+                  ) : (
+                    <p className="text-white opacity-50 text-center col-span-full">No users registered yet.</p>
+                  )}
+                </motion.div>
+              )}
             </TabItem>
           </Tabs>
         </main>
