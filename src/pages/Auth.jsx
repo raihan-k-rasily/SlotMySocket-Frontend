@@ -132,7 +132,16 @@ function Auth({ userRegister, ownerRegister }) {
               toast.error("Your account is currently inactive. Please contact the Admin.");
             }
           } else {
-            setTimeout(() => { navigate("/"); }, 4000);
+            // Check if the user status is ACTIVE
+            if (response.data?.user?.status === "ACTIVE") {
+              toast.success("Login Successful! Redirecting to Owner Dashboard...");
+              setTimeout(() => {
+                navigate("/ownerhome");
+              }, 2000); // Reduced to 2s for better UX, change back to 4000 if preferred
+            } else {
+              // If status is BLOCKED or anything else
+              toast.error("Your account is currently inactive. Please contact the Admin.");
+            }
           }
 
         } else {

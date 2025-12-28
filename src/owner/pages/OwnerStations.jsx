@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-// We'll use framer-motion for the folding slots section instead of Flowbite Collapse
+// We'll use framer-motion for the folding Sockets section instead of Flowbite Collapse
 import { Card, Button, Badge } from 'flowbite-react';
 import { HiPlus, HiPencil, HiTrash, HiLocationMarker, HiLightningBolt, HiChevronDown, HiChevronUp, HiOfficeBuilding } from 'react-icons/hi';
 import OwnerHeader from '../components/OwnerHeader';
@@ -15,7 +15,7 @@ const mockStations = [
         name: 'Tech Hub Parking Lot A',
         coordinates: 'Lat: 34.0522, Lon: -118.2437',
         address: '123 Silicon Valley Blvd, CA 90012',
-        slots: [
+        sockets: [
             { id: 'A1', type: 'Level 2', status: 'Available', power: '7.2 kW', price: '$0.30/kWh' },
             { id: 'A2', type: 'DC Fast', status: 'Charging', power: '50 kW', price: '$0.50/kWh' },
             { id: 'A3', type: 'Level 2', status: 'Maintenance', power: '7.2 kW', price: '$0.30/kWh' },
@@ -26,46 +26,46 @@ const mockStations = [
         name: 'Downtown Garage B',
         coordinates: 'Lat: 40.7128, Lon: -74.0060',
         address: '456 Battery Street, NY 10005',
-        slots: [
+        sockets: [
             { id: 'B1', type: 'Level 2', status: 'Available', power: '7.2 kW', price: '$0.30/kWh' },
             { id: 'B2', type: 'Level 2', status: 'Available', power: '7.2 kW', price: '$0.30/kWh' },
         ]
     }
 ];
 
-// --- Component for an Individual Slot (No change) ---
-const SlotCard = ({ slot, stationId }) => {
-    // ... (SlotCard component remains the same)
+// --- Component for an Individual Socket (No change) ---
+const SocketCard = ({ socket, stationId }) => {
+    // ... (SocketCard component remains the same)
     const statusClass = {
         'Available': 'status-available',
         'Charging': 'status-charging',
         'Maintenance': 'status-maintenance'
-    }[slot.status] || 'status-default';
+    }[socket.status] || 'status-default';
 
     return (
-        <Card className={`slot-card ${statusClass}`}>
+        <Card className={`socket-card ${statusClass}`}>
             <div className="flex justify-between items-start mb-3">
-                <p className="text-xl font-bold tracking-tight slot-id">Slot #{slot.id}</p>
-                <Badge color={slot.status === 'Available' ? 'success' : slot.status === 'Charging' ? 'failure' : 'warning'} className="slot-badge">
-                    {slot.status}
+                <p className="text-xl font-bold tracking-tight socket-id">Socket #{socket.id}</p>
+                <Badge color={socket.status === 'Available' ? 'success' : socket.status === 'Charging' ? 'failure' : 'warning'} className="socket-badge">
+                    {socket.status}
                 </Badge>
             </div>
 
-            <ul className="slot-details">
+            <ul className="socket-details">
                 <li>
                     <HiLightningBolt className="icon" />
-                    <span>Type:</span> **{slot.type}** ({slot.power})
+                    <span>Type:</span> **{socket.type}** ({socket.power})
                 </li>
                 <li>
-                    <span>Rate:</span> **{slot.price}**
+                    <span>Rate:</span> **{socket.price}**
                 </li>
             </ul>
 
             <div className="flex justify-end gap-3 mt-4">
-                <Button size="xs" color="light" className="slot-btn btn-edit">
+                <Button size="xs" color="light" className="socket-btn btn-edit">
                     <HiPencil className="h-4 w-4" />
                 </Button>
-                <Button size="xs" color="failure" className="slot-btn btn-delete">
+                <Button size="xs" color="failure" className="socket-btn btn-delete">
                     <HiTrash className="h-4 w-4" />
                 </Button>
             </div>
@@ -125,15 +125,15 @@ function OwnerStations() {
                                                 {station.address}
                                             </p>
                                             <p className="text-xs text-admin-text-muted">
-                                                Total Slots: **{station.slots.length}** | Active: **{station.slots.filter(s => s.status === 'Available' || s.status === 'Charging').length}**
+                                                Total Sockets: **{station.sockets.length}** | Active: **{station.sockets.filter(s => s.status === 'Available' || s.status === 'Charging').length}**
                                             </p>
                                         </div>
 
                                         {/* Right: Action Button & Collapse Toggle */}
                                         <div className="flex items-center gap-4">
-                                            <Button size="sm" className="btn-add-slot" onClick={(e) => { e.stopPropagation(); alert(`Adding slot to ${station.name}`); }}>
+                                            <Button size="sm" className="btn-add-socket" onClick={(e) => { e.stopPropagation(); alert(`Adding socket to ${station.name}`); }}>
                                                 <HiPlus className="mr-2 h-5 w-5" />
-                                                Add Slot
+                                                Add socket
                                             </Button>
                                             {isOpen ? (
                                                 <HiChevronUp className="h-6 w-6 text-admin-primary-color transition-transform" />
@@ -143,22 +143,22 @@ function OwnerStations() {
                                         </div>
                                     </div>
 
-                                    {/* Slots Container (Collapsible Content) - Replaced Flowbite Collapse with framer-motion */}
+                                    {/* Sockets Container (Collapsible Content) - Replaced Flowbite Collapse with framer-motion */}
                                     {isOpen && (
                                         <motion.div
                                             initial={{ opacity: 0, height: 0 }}
                                             animate={{ opacity: 1, height: 'auto' }}
                                             exit={{ opacity: 0, height: 0 }}
                                             transition={{ duration: 0.3 }}
-                                            className="slots-collapse-wrapper"
+                                            className="sockets-collapse-wrapper"
                                         >
-                                            <div className="slots-grid mt-6">
-                                                {station.slots.length > 0 ? (
-                                                    station.slots.map(slot => (
-                                                        <SlotCard key={slot.id} slot={slot} stationId={station.id} />
+                                            <div className="sockets-grid mt-6">
+                                                {station.sockets.length > 0 ? (
+                                                    station.sockets.map(socket => (
+                                                        <SocketCard key={socket.id} socket={socket} stationId={station.id} />
                                                     ))
                                                 ) : (
-                                                    <p className="no-slots-message">No charging slots added yet for this station.</p>
+                                                    <p className="no-sockets-message">No charging sockets added yet for this station.</p>
                                                 )}
                                             </div>
                                         </motion.div>

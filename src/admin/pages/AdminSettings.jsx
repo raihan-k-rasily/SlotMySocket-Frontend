@@ -16,7 +16,7 @@ function AdminSettings() {
       <AdminSidebar />
 
       <div className="admin-main-wrapper">
-        <AdminHeader />
+         <AdminHeader />
 
         <main className="admin-main-content settings-content">
           <h1 className="admin-page-title">System Settings & Configuration</h1>
@@ -67,10 +67,11 @@ function AdminSettings() {
 
                     {/* Form */}
                     <form className="profile-form">
+                      <TextInput type="text" placeholder="Email" className="dark-input" />
                       <TextInput type="text" placeholder="Name" className="dark-input" />
-                      <TextInput type="password" placeholder="Current Password" className="dark-input" />
-                      <TextInput type="password" placeholder="New Password" className="dark-input" />
-                      <TextInput type="password" placeholder="Confirm New Password" className="dark-input" />
+                      <TextInput type="password" placeholder="Password" className="dark-input" />
+                      {/* <TextInput type="password" placeholder="New Password" className="dark-input" />
+                      <TextInput type="password" placeholder="Confirm New Password" className="dark-input" /> */}
 
                       <div className="profile-actions">
                         <Button type="reset" className="btn-reset">Reset</Button>
@@ -84,8 +85,7 @@ function AdminSettings() {
             </TabItem>
 
             {/* 2. Global System Controls (Shifted to second tab) */}
-            <TabItem title="System Controls" icon={HiCog}>
-              {/* ... (Existing System Controls Content) ... */}
+            {/* <TabItem title="System Controls" icon={HiCog}>
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -121,7 +121,7 @@ function AdminSettings() {
                   />
                 </div>
               </motion.div>
-            </TabItem>
+            </TabItem> */}
 
             {/* 3. Security and Access */}
             {/* <TabItem title="Security & Access" icon={HiLockClosed}>

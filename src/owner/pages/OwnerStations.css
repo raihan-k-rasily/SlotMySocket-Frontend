@@ -67,8 +67,8 @@
     color: var(--admin-text-muted);
 }
 
-/* Add Slot Button (Top Right Action) */
-.btn-add-slot {
+/* Add socket Button (Top Right Action) */
+.btn-add-socket {
     /* Flowbite Button uses a complex structure, use Tailwind utilities for gradient */
     background: linear-gradient(135deg, #39FFAC, #1AA380) !important;
     color: var(--admin-bg-dark) !important;
@@ -79,22 +79,22 @@
     transition: all 0.2s;
 }
 
-.btn-add-slot:hover {
+.btn-add-socket:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(57, 255, 172, 0.6);
 }
 
 /* ================================================= */
-/* SLOTS GRID & CARD */
+/* socketS GRID & CARD */
 /* ================================================= */
 
-.slots-grid {
+.sockets-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
 }
 
-.slot-card {
+.socket-card {
     background-color: var(--admin-card-bg) !important;
     border: 1px solid var(--admin-border-color) !important;
     border-radius: 10px !important;
@@ -104,17 +104,17 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
 }
 
-.slot-card:hover {
+.socket-card:hover {
     transform: translateY(-3px);
     border-color: rgba(57, 255, 172, 0.4) !important;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
 }
 
-.slot-id {
+.socket-id {
     color: var(--admin-primary-color);
 }
 
-.slot-details {
+.socket-details {
     list-style: none;
     padding: 0;
     margin: 15px 0 0 0;
@@ -122,7 +122,7 @@
     padding-top: 10px;
 }
 
-.slot-details li {
+.socket-details li {
     display: flex;
     align-items: center;
     font-size: 0.9rem;
@@ -130,45 +130,45 @@
     margin-bottom: 5px;
 }
 
-.slot-details .icon {
+.socket-details .icon {
     margin-right: 8px;
     color: var(--admin-primary-color);
 }
 
 /* Status Badges */
-.slot-badge span { /* Targeting the inner span of the Flowbite Badge */
+.socket-badge span { /* Targeting the inner span of the Flowbite Badge */
     font-weight: 600 !important;
     text-transform: uppercase;
 }
 
-/* Slot Card Status Color Indicators (Subtle left border) */
-.slot-card.status-available { border-left: 5px solid #10B981 !important; } /* Green */
-.slot-card.status-charging { border-left: 5px solid #F59E0B !important; } /* Yellow/Orange */
-.slot-card.status-maintenance { border-left: 5px solid #EF4444 !important; } /* Red */
+/* socket Card Status Color Indicators (Subtle left border) */
+.socket-card.status-available { border-left: 5px solid #10B981 !important; } /* Green */
+.socket-card.status-charging { border-left: 5px solid #F59E0B !important; } /* Yellow/Orange */
+.socket-card.status-maintenance { border-left: 5px solid #EF4444 !important; } /* Red */
 
 /* Small Action Buttons */
-.slot-btn {
+.socket-btn {
     padding: 6px 8px !important;
     border-radius: 6px !important;
 }
 
-.slot-btn.btn-edit {
+.socket-btn.btn-edit {
     background-color: var(--admin-card-bg) !important;
     border: 1px solid var(--admin-text-muted) !important;
     color: var(--admin-text-muted) !important;
 }
 
-.slot-btn.btn-edit:hover {
+.socket-btn.btn-edit:hover {
     background-color: rgba(57, 255, 172, 0.1) !important;
     border-color: var(--admin-primary-color) !important;
     color: var(--admin-primary-color) !important;
 }
-.slot-btn.btn-delete {
+.socket-btn.btn-delete {
     background-color: rgba(239, 68, 68, 0.2) !important;
     border-color: #EF4444 !important;
 }
 
-.slot-btn.btn-delete:hover {
+.socket-btn.btn-delete:hover {
     background-color: rgba(239, 68, 68, 0.3) !important;
 }
 
@@ -240,8 +240,8 @@
     color: var(--admin-text-muted);
 }
 
-/* Add Slot Button (Inside Header) */
-.btn-add-slot {
+/* Add socket Button (Inside Header) */
+.btn-add-socket {
     background: rgba(57, 255, 172, 0.15) !important;
     color: var(--admin-primary-color) !important;
     border: 1px solid var(--admin-primary-color) !important;
@@ -251,14 +251,14 @@
     transition: all 0.2s;
 }
 
-.btn-add-slot:hover {
+.btn-add-socket:hover {
     background: rgba(57, 255, 172, 0.3) !important;
 }
 
-/* --- SLOTS COLLAPSIBLE CONTENT --- */
+/* --- socketS COLLAPSIBLE CONTENT --- */
 
 /* Wrapper for premium visual separation */
-.slots-collapse-wrapper {
+.sockets-collapse-wrapper {
     padding: 0 30px 30px 30px; /* Padding for the entire collapsible area */
     border-top: 1px solid var(--admin-border-color);
     background-color: rgba(0, 0, 0, 0.15); /* Slightly darker background for content area */
@@ -266,19 +266,19 @@
     margin-top: 0 !important;
 }
 
-.slots-grid {
+.sockets-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
-    padding-top: 20px; /* Space above the first slot card */
+    padding-top: 20px; /* Space above the first socket card */
 }
 
 /* ================================================= */
-/* SLOTS CARD (Unchanged, but keeping for reference) */
+/* socketS CARD (Unchanged, but keeping for reference) */
 /* ================================================= */
 
-.slot-card {
-    /* ... existing SlotCard styles remain ... */
+.socket-card {
+    /* ... existing socketCard styles remain ... */
     background-color: var(--admin-card-bg) !important;
     border: 1px solid var(--admin-border-color) !important;
     border-radius: 10px !important;
@@ -288,15 +288,15 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
 }
 
-.slot-card:hover {
+.socket-card:hover {
     transform: translateY(-3px);
     border-color: rgba(57, 255, 172, 0.4) !important;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
 }
 
 /* Status Indicators */
-.slot-card.status-available { border-left: 5px solid #10B981 !important; }
-.slot-card.status-charging { border-left: 5px solid #F59E0B !important; }
-.slot-card.status-maintenance { border-left: 5px solid #EF4444 !important; }
+.socket-card.status-available { border-left: 5px solid #10B981 !important; }
+.socket-card.status-charging { border-left: 5px solid #F59E0B !important; }
+.socket-card.status-maintenance { border-left: 5px solid #EF4444 !important; }
 
-/* ... other SlotCard styles ... */
+/* ... other socketCard styles ... */
