@@ -420,3 +420,171 @@
     transform: translateY(-2px);
     background: #5AFCA9;
 }
+
+
+
+
+/* Container for info inside the card */
+.station-info-grid {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 10px;
+}
+
+/* Ensure address wraps nicely and doesn't break the card */
+.station-info-grid p {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Shows max 2 lines then adds ... */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-width: 500px;
+}
+
+/* The Operating Hours "Pill" */
+.bg-emerald-500\/5 {
+    background-color: rgba(16, 185, 129, 0.05);
+}
+
+/* Pulse animation for the "Open" indicator */
+@keyframes pulse-soft {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+.animate-pulse {
+    animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+    .station-info-grid p {
+        max-width: 100%;
+        font-size: 0.8rem;
+    }
+}
+
+/* Flowbite Badge Overrides for Dark Mode */
+span[class*="bg-success"] {
+    background-color: rgba(16, 185, 129, 0.1) !important;
+    color: #10B981 !important;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+span[class*="bg-warning"] {
+    background-color: rgba(245, 158, 11, 0.1) !important;
+    color: #F59E0B !important;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+span[class*="bg-failure"] {
+    background-color: rgba(244, 63, 94, 0.1) !important;
+    color: #F43F5E !important;
+    border: 1px solid rgba(244, 63, 94, 0.2);
+}
+
+/* Make sure the station card highlights slightly when active */
+.station-master-card {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.station-open {
+    border-color: rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.02);
+    box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.5);
+}
+
+
+/* Base style for all station badges */
+.custom-status-badge {
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid transparent;
+}
+
+/* Active State */
+.status-active {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #10B981;
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+}
+
+/* Pending State */
+.status-pending {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #F59E0B;
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+/* Inactive / Maintenance State */
+.status-inactive {
+    background-color: rgba(244, 63, 94, 0.1);
+    color: #F43F5E;
+    border-color: rgba(244, 63, 94, 0.3);
+}
+
+
+/* Layout Helpers */
+.flex-row {
+    display: flex;
+    width: 100%;
+    gap: 1rem; /* Adjust space between the two inputs */
+}
+
+.flex-1 {
+    flex: 1; /* This forces the inputs to be exactly 50% width each */
+}
+
+.w-full {
+    width: 100%;
+}
+
+/* Time Input Specifics */
+input[type="time"].custom-input {
+    color-scheme: dark; /* Ensures the clock icon/popup is dark mode */
+}
+
+/* Optional: Color coding the labels for better UX */
+.label-open {
+    color: #10B981 !important; /* Emerald */
+    font-size: 0.75rem;
+}
+
+.label-close {
+    color: #FB7185 !important; /* Rose */
+    font-size: 0.75rem;
+}
+
+/* Fix for the Rate input alignment */
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.currency-prefix {
+    position: absolute;
+    left: 12px;
+    color: var(--admin-primary-color);
+    font-weight: bold;
+    pointer-events: none; /* User clicks through to the input */
+    z-index: 10;
+}
+
+/* Ensure the input inside doesn't collapse and accounts for the icon */
+.icon-padding {
+    padding-left: 30px !important; /* Make room for the ₹ symbol */
+}
+
+/* Ensure flex-row child groups stay consistent */
+.flex-row .form-group {
+    margin-bottom: 0; /* Let the row handle spacing */
+}
