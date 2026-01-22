@@ -45,6 +45,13 @@ function OwnerStations() {
     const [isStationModalOpen, setIsStationModalOpen] = useState(false);
     const [isSocketModalOpen, setIsSocketModalOpen] = useState(false);
 
+    const [stationDetails,setStationDetails] = useState({
+        stationName:"",
+        latitude:"",
+        longitude:"",
+        openingAt:"",
+        closingAt:""
+    })
     // Track which station we are adding a socket to
     const [selectedStationForSocket, setSelectedStationForSocket] = useState(null);
 
@@ -63,6 +70,23 @@ function OwnerStations() {
                 console.error("Error fetching stations:", err);
             } finally {
                 setLoading(false);
+            }
+        }
+    };
+    
+    const addOwnerStations = async () => {
+        const token = sessionStorage.getItem("token");
+        if (token) {
+            const updatedToken = token.replace(/"/g, "");
+            const reqHeader = { "Authorization": `Bearer ${updatedToken}` };
+            try {
+                const result = await addNewStationsByOwner(reqHeader,);
+                if (result.status === 200) {
+                    setStations(result.data);
+                    if (result.data.length > 0) setOpenStationId(result.data[0]._id);
+                }
+            } catch (err) {
+                console.error("Error fetching stations:", err);
             }
         }
     };
@@ -221,18 +245,24 @@ function OwnerStations() {
                                         {/* Full Width Row */}
                                         <div className="form-group">
                                             <label>Station Name</label>
-                                            <input type="text" placeholder="e.g. Cyber Plaza Hub" className="custom-input w-full" />
+                                            <input
+                                            value={stationDetails.stationName} onChange={e=>setStationDetails({...stationDetails,stationName:e.target.value})}
+                                             type="text" placeholder="e.g. Cyber Plaza Hub" className="custom-input w-full" />
                                         </div>
 
                                         {/* Coordinates Row: Latitude & Longitude */}
                                         <div className="flex-row gap-4 mb-4">
                                             <div className="form-group flex-1">
                                                 <label>Latitude</label>
-                                                <input type="text" placeholder="12.9716" className="custom-input w-full" />
+                                                <input
+                                                value={stationDetails.latitude} onChange={e=>setStationDetails({...stationDetails,latitude:e.target.value})}
+                                                type="text" placeholder="12.9716" className="custom-input w-full" />
                                             </div>
                                             <div className="form-group flex-1">
                                                 <label>Longitude</label>
-                                                <input type="text" placeholder="77.5946" className="custom-input w-full" />
+                                                <input
+                                                value={stationDetails.longitude} onChange={e=>setStationDetails({...stationDetails,longitude:e.target.value})}
+                                                 type="text" placeholder="77.5946" className="custom-input w-full" />
                                             </div>
                                         </div>
 
@@ -240,11 +270,15 @@ function OwnerStations() {
                                         <div className="flex-row gap-4 mb-4">
                                             <div className="form-group flex-1">
                                                 <label className="label-open">Opening At</label>
-                                                <input type="time" className="custom-input w-full" />
+                                                <input
+                                                value={stationDetails.openingAt} onChange={e=>setStationDetails({...stationDetails,openingAt:e.target.value})}
+                                                type="time" className="custom-input w-full" />
                                             </div>
                                             <div className="form-group flex-1">
                                                 <label className="label-close">Closing At</label>
-                                                <input type="time" className="custom-input w-full" />
+                                                <input
+                                                value={stationDetails.closingAt} onChange={e=>setStationDetails({...stationDetails,closingAt:e.target.value})}
+                                                type="time" className="custom-input w-full" />
                                             </div>
                                         </div>
 
@@ -257,7 +291,7 @@ function OwnerStations() {
 
                                     <div className="modal-footer">
                                         <button className="btn-cancel" onClick={() => setIsStationModalOpen(false)}>Discard</button>
-                                        <button className="btn-save shadow-glow">Confirm Registration</button>
+                                        <button className="btn-save shadow-glow" onClick={()=>addOwnerStations}>Confirm Registration</button>
                                     </div>
                                 </motion.div>
                             </div>

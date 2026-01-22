@@ -47,7 +47,12 @@ export const updateUserStatusAPI = async (id, data, reqHeader) => {
     return await commonAPI('PUT', `${serverURL}/api/admin/update-user-status/${id}`, data, reqHeader);
 };
 
-// 10 Get All Users API
+// 10 Get All Stations by  OwnerId API
 export const getViewOwnerStations = async (reqHeader) => {
     return await commonAPI('GET', `${serverURL}/api/owner/view-owner-stations`, {}, reqHeader);
+};
+
+// 11 Get All Users API
+export const addNewStationsByOwner = async (reqHeader) => {
+    return await commonAPI('POST', `${serverURL}/api/owner/add-owner-stations`, {}, reqHeader);
 };
