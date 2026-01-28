@@ -6,6 +6,7 @@ import {
     HiOfficeBuilding, HiCurrencyDollar
 } from 'react-icons/hi';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ToastContainer, toast } from 'react-toastify';
 
 import OwnerHeader from '../components/OwnerHeader';
 import OwnerSidebar from '../components/OwnerSidebar';
@@ -45,17 +46,18 @@ function OwnerStations() {
     const [isStationModalOpen, setIsStationModalOpen] = useState(false);
     const [isSocketModalOpen, setIsSocketModalOpen] = useState(false);
 
-    const [stationDetails,setStationDetails] = useState({
-        stationName:"",
-        latitude:"",
-        longitude:"",
-        openingAt:"",
-        closingAt:""
+    const [stationDetails, setStationDetails] = useState({
+        stationName: "",
+        latitude: "",
+        longitude: "",
+        openingAt: "",
+        closingAt: ""
     })
     // Track which station we are adding a socket to
     const [selectedStationForSocket, setSelectedStationForSocket] = useState(null);
 
     const fetchOwnerStations = async () => {
+
         const token = sessionStorage.getItem("token");
         if (token) {
             const updatedToken = token.replace(/"/g, "");
@@ -73,24 +75,88 @@ function OwnerStations() {
             }
         }
     };
-    
-    const addOwnerStations = async () => {
-        const token = sessionStorage.getItem("token");
-        if (token) {
-            const updatedToken = token.replace(/"/g, "");
-            const reqHeader = { "Authorization": `Bearer ${updatedToken}` };
-            try {
-                const result = await addNewStationsByOwner(reqHeader,);
-                if (result.status === 200) {
-                    setStations(result.data);
-                    if (result.data.length > 0) setOpenStationId(result.data[0]._id);
-                }
-            } catch (err) {
-                console.error("Error fetching stations:", err);
-            }
-        }
-    };
+const addOwnerStations = async () => {
+    const token = sessionStorage.getItem("token");
 
+    // 1. Destructure for easier validation and payload creation
+    const { stationName, latitude, longitude, openingAt, closingAt } = stationDetails;
+
+    // 2. Convert to numbers for coordinate validation
+    const latNum = parseFloat(latitude);
+    const lonNum = parseFloat(longitude);
+
+    const isValidCoordinate = !isNaN(latNum) && latNum >= -90 && latNum <= 90 &&
+                              !isNaN(lonNum) && lonNum >= -180 && lonNum <= 180;
+
+    // 3. Validation Check
+    if (!stationName || !latitude || !longitude || !openingAt || !closingAt || !isValidCoordinate) {
+        toast.warn("Please fill in all details correctly. Ensure coordinates are valid numbers.", {
+            position: "top-center",
+            theme: "colored"
+        });
+        return;
+    }
+
+    if (token) {
+        // Clean token and setup headers
+        const updatedToken = token.replace(/"/g, "");
+        const reqHeader = { "Authorization": `Bearer ${updatedToken}` };
+
+        // Prepare the payload to match your controller
+        const payload = {
+            stationName,
+            latitude: latNum,
+            longitude: lonNum,
+            openingAt,
+            closingAt
+        };
+
+        try {
+            console.log('Registering new station:', payload);
+            
+            // Call the API service
+            const response = await addNewStationsByOwner(reqHeader, payload);
+
+            if (response.status === 201) {
+                toast.success("Station registered! Waiting for Admin approval.", {
+                    position: "top-center",
+                    autoClose: 3000,
+                    theme: "colored",
+                });
+
+                // Reset form and close modal
+                setStationDetails({
+                    stationName: "",
+                    latitude: "",
+                    longitude: "",
+                    openingAt: "",
+                    closingAt: ""
+                });
+                setIsStationModalOpen(false);
+
+                // Re-fetch the stations list to show the new pending station
+                fetchOwnerStations();
+
+            } else {
+                const errorMsg = response.response?.data?.message || "Registration failed.";
+                toast.error(errorMsg, {
+                    position: "top-center",
+                    autoClose: 3000,
+                    theme: "colored",
+                });
+            }
+        } catch (error) {
+            console.error("Station Registration Error:", error);
+            toast.error("Server error. Please check your connection.", {
+                position: "top-center",
+                autoClose: 3000,
+                theme: "colored"
+            });
+        }
+    } else {
+        toast.error("Session expired. Please login again.");
+    }
+};
     useEffect(() => {
         fetchOwnerStations();
     }, []);
@@ -246,8 +312,8 @@ function OwnerStations() {
                                         <div className="form-group">
                                             <label>Station Name</label>
                                             <input
-                                            value={stationDetails.stationName} onChange={e=>setStationDetails({...stationDetails,stationName:e.target.value})}
-                                             type="text" placeholder="e.g. Cyber Plaza Hub" className="custom-input w-full" />
+                                                value={stationDetails.stationName} onChange={e => setStationDetails({ ...stationDetails, stationName: e.target.value })}
+                                                type="text" placeholder="e.g. Cyber Plaza Hub" className="custom-input w-full" />
                                         </div>
 
                                         {/* Coordinates Row: Latitude & Longitude */}
@@ -255,14 +321,14 @@ function OwnerStations() {
                                             <div className="form-group flex-1">
                                                 <label>Latitude</label>
                                                 <input
-                                                value={stationDetails.latitude} onChange={e=>setStationDetails({...stationDetails,latitude:e.target.value})}
-                                                type="text" placeholder="12.9716" className="custom-input w-full" />
+                                                    value={stationDetails.latitude} onChange={e => setStationDetails({ ...stationDetails, latitude: e.target.value })}
+                                                    type="text" placeholder="12.9716" className="custom-input w-full" />
                                             </div>
                                             <div className="form-group flex-1">
                                                 <label>Longitude</label>
                                                 <input
-                                                value={stationDetails.longitude} onChange={e=>setStationDetails({...stationDetails,longitude:e.target.value})}
-                                                 type="text" placeholder="77.5946" className="custom-input w-full" />
+                                                    value={stationDetails.longitude} onChange={e => setStationDetails({ ...stationDetails, longitude: e.target.value })}
+                                                    type="text" placeholder="77.5946" className="custom-input w-full" />
                                             </div>
                                         </div>
 
@@ -271,14 +337,14 @@ function OwnerStations() {
                                             <div className="form-group flex-1">
                                                 <label className="label-open">Opening At</label>
                                                 <input
-                                                value={stationDetails.openingAt} onChange={e=>setStationDetails({...stationDetails,openingAt:e.target.value})}
-                                                type="time" className="custom-input w-full" />
+                                                    value={stationDetails.openingAt} onChange={e => setStationDetails({ ...stationDetails, openingAt: e.target.value })}
+                                                    type="time" className="custom-input w-full" />
                                             </div>
                                             <div className="form-group flex-1">
                                                 <label className="label-close">Closing At</label>
                                                 <input
-                                                value={stationDetails.closingAt} onChange={e=>setStationDetails({...stationDetails,closingAt:e.target.value})}
-                                                type="time" className="custom-input w-full" />
+                                                    value={stationDetails.closingAt} onChange={e => setStationDetails({ ...stationDetails, closingAt: e.target.value })}
+                                                    type="time" className="custom-input w-full" />
                                             </div>
                                         </div>
 
@@ -291,7 +357,7 @@ function OwnerStations() {
 
                                     <div className="modal-footer">
                                         <button className="btn-cancel" onClick={() => setIsStationModalOpen(false)}>Discard</button>
-                                        <button className="btn-save shadow-glow" onClick={()=>addOwnerStations}>Confirm Registration</button>
+                                        <button className="btn-save shadow-glow" onClick={addOwnerStations}>Confirm Registration</button>
                                     </div>
                                 </motion.div>
                             </div>
@@ -360,6 +426,19 @@ function OwnerStations() {
             </div>
         </div>
     );
+
+
+    <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored" />
 }
 
 export default OwnerStations;
