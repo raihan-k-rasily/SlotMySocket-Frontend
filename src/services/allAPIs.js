@@ -52,7 +52,18 @@ export const getViewOwnerStations = async (reqHeader) => {
     return await commonAPI('GET', `${serverURL}/api/owner/view-owner-stations`, {}, reqHeader);
 };
 
-// 11 Get All Users API
-export const addNewStationsByOwner = async (reqHeader) => {
-    return await commonAPI('POST', `${serverURL}/api/owner/add-owner-stations`, {}, reqHeader);
+// 11 Add new Station by owner API
+export const addNewStationsByOwner = async (reqBody,reqHeader) => {
+    return await commonAPI('POST', `${serverURL}/api/owner/add-owner-stations`, reqBody, reqHeader);
+};
+
+// 12 Add new Socket by owner API
+export const addNewsocketByOwner = async (reqBody,reqHeader) => {
+    return await commonAPI('POST', `${serverURL}/api/owner/add-owner-socket`, reqBody, reqHeader);
+};
+
+
+// 13 Get Socket by Station API
+export const getStationSckets = async (reqBody,reqHeader) => {
+    return await commonAPI('POST', `${serverURL}/api/owner/get-station-socket`, reqBody, reqHeader);
 };

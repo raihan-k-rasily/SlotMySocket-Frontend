@@ -11,7 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import OwnerHeader from '../components/OwnerHeader';
 import OwnerSidebar from '../components/OwnerSidebar';
 import Footer from '../../components/Footer';
-import { getViewOwnerStations } from '../../services/allAPIs';
+import { getViewOwnerStations, getStationSckets, addNewStationsByOwner, addNewsocketByOwner } from '../../services/allAPIs';
 import './OwnerStations.css';
 
 const SocketCard = ({ socket }) => {
@@ -28,8 +28,8 @@ const SocketCard = ({ socket }) => {
                 </Badge>
             </div>
             <ul className="socket-details">
-                <li><HiLightningBolt className="icon" /> {socket.protocol} ({socket.power} kW)</li>
-                <li><HiCurrencyDollar className="icon" /> ₹{socket.rate}/h</li>
+                <li><HiLightningBolt className="icon" /> {socket.connectorType} ({socket.powerType} kW)</li>
+                <li><HiCurrencyDollar className="icon" /> ₹{socket.pricePerHour}/h</li>
             </ul>
             <div className="flex justify-end gap-3 mt-4">
                 <button className="socket-btn btn-edit p-2 rounded hover:opacity-80"><HiPencil /></button>
@@ -41,6 +41,7 @@ const SocketCard = ({ socket }) => {
 
 function OwnerStations() {
     const [stations, setStations] = useState([]);
+    const [sockets, setSockets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [openStationId, setOpenStationId] = useState(null);
     const [isStationModalOpen, setIsStationModalOpen] = useState(false);
@@ -52,6 +53,14 @@ function OwnerStations() {
         longitude: "",
         openingAt: "",
         closingAt: ""
+    })
+
+    const [socketDetails, setsocketDetails] = useState({
+        stationId: "",
+        powerType: "",
+        connectorType: "",
+        pricePerHour: ""
+
     })
     // Track which station we are adding a socket to
     const [selectedStationForSocket, setSelectedStationForSocket] = useState(null);
@@ -66,7 +75,8 @@ function OwnerStations() {
                 const result = await getViewOwnerStations(reqHeader);
                 if (result.status === 200) {
                     setStations(result.data);
-                    if (result.data.length > 0) setOpenStationId(result.data[0]._id);
+                    if (result.data.length > 0)
+                     setOpenStationId(result.data[0]._id);
                 }
             } catch (err) {
                 console.error("Error fetching stations:", err);
@@ -75,92 +85,199 @@ function OwnerStations() {
             }
         }
     };
-const addOwnerStations = async () => {
-    const token = sessionStorage.getItem("token");
+    
+    const fetchStationSockets = async (stationId) => {
+        console.log(stationId);
+        
 
-    // 1. Destructure for easier validation and payload creation
-    const { stationName, latitude, longitude, openingAt, closingAt } = stationDetails;
-
-    // 2. Convert to numbers for coordinate validation
-    const latNum = parseFloat(latitude);
-    const lonNum = parseFloat(longitude);
-
-    const isValidCoordinate = !isNaN(latNum) && latNum >= -90 && latNum <= 90 &&
-                              !isNaN(lonNum) && lonNum >= -180 && lonNum <= 180;
-
-    // 3. Validation Check
-    if (!stationName || !latitude || !longitude || !openingAt || !closingAt || !isValidCoordinate) {
-        toast.warn("Please fill in all details correctly. Ensure coordinates are valid numbers.", {
-            position: "top-center",
-            theme: "colored"
-        });
-        return;
-    }
-
-    if (token) {
-        // Clean token and setup headers
-        const updatedToken = token.replace(/"/g, "");
-        const reqHeader = { "Authorization": `Bearer ${updatedToken}` };
-
-        // Prepare the payload to match your controller
-        const payload = {
-            stationName,
-            latitude: latNum,
-            longitude: lonNum,
-            openingAt,
-            closingAt
-        };
-
-        try {
-            console.log('Registering new station:', payload);
-            
-            // Call the API service
-            const response = await addNewStationsByOwner(reqHeader, payload);
-
-            if (response.status === 201) {
-                toast.success("Station registered! Waiting for Admin approval.", {
-                    position: "top-center",
-                    autoClose: 3000,
-                    theme: "colored",
-                });
-
-                // Reset form and close modal
-                setStationDetails({
-                    stationName: "",
-                    latitude: "",
-                    longitude: "",
-                    openingAt: "",
-                    closingAt: ""
-                });
-                setIsStationModalOpen(false);
-
-                // Re-fetch the stations list to show the new pending station
-                fetchOwnerStations();
-
-            } else {
-                const errorMsg = response.response?.data?.message || "Registration failed.";
-                toast.error(errorMsg, {
-                    position: "top-center",
-                    autoClose: 3000,
-                    theme: "colored",
-                });
+        const token = sessionStorage.getItem("token");
+        if (token) {
+            const updatedToken = token.replace(/"/g, "");
+            const reqHeader = { "Authorization": `Bearer ${updatedToken}` };
+            try {
+                const reqBody = {stationId}
+                const result = await getStationSckets(reqBody,reqHeader);
+                if (result.status === 200) {
+                    setSockets(result.data);
+                }
+            } catch (err) {
+                console.error("Error fetching sockets:", err);
+            } finally {
+                setLoading(false);
             }
-        } catch (error) {
-            console.error("Station Registration Error:", error);
-            toast.error("Server error. Please check your connection.", {
+        }
+    };
+    const addSocket = async (stationId) => {
+        const token = sessionStorage.getItem("token");
+        console.log(stationId);
+
+        // 1. Destructure for easier validation and payload creation
+
+        const { powerType, connectorType, pricePerHour } = socketDetails;
+
+        console.log(socketDetails);
+
+
+
+        // 3. Validation Check
+        if (!powerType || !connectorType || !pricePerHour) {
+            toast.warn("Please fill in all details correctly.", {
                 position: "top-center",
-                autoClose: 3000,
                 theme: "colored"
             });
+            return;
         }
-    } else {
-        toast.error("Session expired. Please login again.");
+
+        if (token) {
+            // Clean token and setup headers
+            const updatedToken = token.replace(/"/g, "");
+            const reqHeader = { "Authorization": `Bearer ${updatedToken}` };
+
+            // Prepare the payload to match your controller
+            const reqBody = {
+                stationId: stationId,
+                powerType,
+                connectorType,
+                pricePerHour
+            };
+
+            try {
+                console.log('Registering new Socket:', reqBody);
+
+                // Call the API service
+                const response = await addNewsocketByOwner(reqBody, reqHeader);
+
+                if (response.status === 201) {
+                    toast.success("Socket registered! Waiting for Admin approval.", {
+                        position: "top-center",
+                        autoClose: 3000,
+                        theme: "colored",
+                    });
+
+                    // Reset form and close modal
+                    setsocketDetails({
+                        stationId: "",
+                        powerType: "",
+                        connectorType: "",
+                        pricePerHour: ""
+                    });
+                    setIsSocketModalOpen(false);
+
+                    // Re-fetch the Socket list to show the new pending station
+                    // fetchOwnerStations();
+
+                } else {
+                    const errorMsg = response.response?.data?.message || "Registration failed.";
+                    toast.error(errorMsg, {
+                        position: "top-center",
+                        autoClose: 3000,
+                        theme: "colored",
+                    });
+                }
+            } catch (error) {
+                console.error("Socket Registration Error:", error);
+                toast.error("Server error. Please check your connection.", {
+                    position: "top-center",
+                    autoClose: 3000,
+                    theme: "colored"
+                });
+            }
+        } else {
+            toast.error("Session expired. Please login again.");
+        }
+
     }
-};
+    const addOwnerStations = async () => {
+        const token = sessionStorage.getItem("token");
+
+        // 1. Destructure for easier validation and payload creation
+        const { stationName, latitude, longitude, openingAt, closingAt } = stationDetails;
+
+        // 2. Convert to numbers for coordinate validation
+        const latNum = parseFloat(latitude);
+        const lonNum = parseFloat(longitude);
+
+        const isValidCoordinate = !isNaN(latNum) && latNum >= -90 && latNum <= 90 &&
+            !isNaN(lonNum) && lonNum >= -180 && lonNum <= 180;
+
+        // 3. Validation Check
+        if (!stationName || !latitude || !longitude || !openingAt || !closingAt || !isValidCoordinate) {
+            toast.warn("Please fill in all details correctly. Ensure coordinates are valid numbers.", {
+                position: "top-center",
+                theme: "colored"
+            });
+            return;
+        }
+
+        if (token) {
+            // Clean token and setup headers
+            const updatedToken = token.replace(/"/g, "");
+            const reqHeader = { "Authorization": `Bearer ${updatedToken}` };
+
+            // Prepare the payload to match your controller
+            const reqBody = {
+                stationName,
+                latitude: latNum,
+                longitude: lonNum,
+                openingAt,
+                closingAt
+            };
+
+            try {
+                console.log('Registering new station:', reqBody);
+
+                // Call the API service
+                const response = await addNewStationsByOwner(reqBody, reqHeader);
+
+                if (response.status === 201) {
+                    toast.success("Station registered! Waiting for Admin approval.", {
+                        position: "top-center",
+                        autoClose: 3000,
+                        theme: "colored",
+                    });
+
+                    // Reset form and close modal
+                    setStationDetails({
+                        stationName: "",
+                        latitude: "",
+                        longitude: "",
+                        openingAt: "",
+                        closingAt: ""
+                    });
+                    setIsStationModalOpen(false);
+
+                    // Re-fetch the stations list to show the new pending station
+                    fetchOwnerStations();
+
+                } else {
+                    const errorMsg = response.response?.data?.message || "Registration failed.";
+                    toast.error(errorMsg, {
+                        position: "top-center",
+                        autoClose: 3000,
+                        theme: "colored",
+                    });
+                }
+            } catch (error) {
+                console.error("Station Registration Error:", error);
+                toast.error("Server error. Please check your connection.", {
+                    position: "top-center",
+                    autoClose: 3000,
+                    theme: "colored"
+                });
+            }
+        } else {
+            toast.error("Session expired. Please login again.");
+        }
+    };
     useEffect(() => {
         fetchOwnerStations();
     }, []);
-
+useEffect(() => {
+    if (openStationId) {
+        setSockets([])
+        fetchStationSockets(openStationId);
+    }
+}, [openStationId]);
     return (
         <div className="admin-dashboard-layout bg-[#0A0A0A] min-h-screen text-[#F0F4F8] flex">
             <OwnerSidebar />
@@ -267,9 +384,9 @@ const addOwnerStations = async () => {
                                                     className="overflow-hidden"
                                                 >
                                                     <div className="sockets-collapse-wrapper p-6 border-t border-white/5 bg-black/40">
-                                                        {station.sockets && station.sockets.length > 0 ? (
+                                                        {sockets.length>0 ? (
                                                             <div className="sockets-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                                                {station.sockets.map((s, index) => (
+                                                                {sockets.map((s, index) => (
                                                                     <SocketCard key={index} socket={s} />
                                                                 ))}
                                                             </div>
@@ -382,11 +499,15 @@ const addOwnerStations = async () => {
 
                                     <div className="modal-body">
                                         <div className="form-group mb-6">
-                                            <label>Charger Protocol</label>
-                                            <select className="custom-input w-full">
-                                                <option>CCS2 (DC Fast)</option>
-                                                <option>Type 2 (AC)</option>
-                                                <option>GB/T</option>
+                                            <label>Connector Type</label>
+                                            <select
+                                                value={socketDetails.connectorType} onChange={e => setsocketDetails({ ...socketDetails, connectorType: e.target.value })}
+                                                className="custom-input w-full">
+
+                                                <option value="">Select Connector</option>
+                                                <option value="CCS">CCS2</option>
+                                                <option value="Type2">Type 2</option>
+                                                <option value="GB/T">GB/T</option>
                                             </select>
                                         </div>
 
@@ -394,16 +515,23 @@ const addOwnerStations = async () => {
                                         <div className="flex-row gap-4">
                                             {/* Left Half: Power */}
                                             <div className="form-group flex-1">
-                                                <label>Power (kW)</label>
-                                                <input type="number" placeholder="60" className="custom-input w-full" />
+                                                <label>Power Type</label>
+                                                <select
+                                                    value={socketDetails.powerType} onChange={e => setsocketDetails({ ...socketDetails, powerType: e.target.value })}
+                                                    className="custom-input w-full">
+                                                <option value="">Select Power Type</option>
+                                                    <option value="DC">DC </option>
+                                                    <option value="AC">AC</option>
+                                                </select>
                                             </div>
 
                                             {/* Right Half: Rate */}
                                             <div className="form-group flex-1">
-                                                <label>Rate (₹/hour)</label>
+                                                <label>Price (₹/hour)</label>
                                                 <div className="input-with-icon">
                                                     <span className="currency-prefix">₹</span>
                                                     <input
+                                                        value={socketDetails.pricePerHour} onChange={e => setsocketDetails({ ...socketDetails, pricePerHour: e.target.value })}
                                                         type="number"
                                                         placeholder="450"
                                                         className="custom-input w-full icon-padding"
@@ -415,7 +543,7 @@ const addOwnerStations = async () => {
 
                                     <div className="modal-footer">
                                         <button className="btn-cancel" onClick={() => setIsSocketModalOpen(false)}>Cancel</button>
-                                        <button className="btn-save shadow-glow">Add to Station</button>
+                                        <button className="btn-save shadow-glow" onClick={() => addSocket(selectedStationForSocket)}>Add to Station</button>
                                     </div>
                                 </motion.div>
                             </div>
@@ -424,21 +552,22 @@ const addOwnerStations = async () => {
                 </main>
                 <Footer />
             </div>
+
+            <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored" />
         </div>
     );
 
 
-    <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored" />
 }
 
 export default OwnerStations;

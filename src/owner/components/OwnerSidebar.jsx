@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate  } from 'react-router-dom';
 import '../pages/OwnerHome.css';
 // Changed icons to be more relevant to an Owner/Provider role
 import { Home, Zap, MapPin, Settings } from 'lucide-react'; 
@@ -16,6 +16,12 @@ const navItems = [
 ];
 
 function OwnerSidebar() {
+    const navigate = useNavigate();
+  const logout = () => {
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
+    navigate("/login");
+};
   return (
     <nav className="admin-sidebar">
       <div className="sidebar-logo">
@@ -41,7 +47,7 @@ function OwnerSidebar() {
       </ul>
 
       <div className="sidebar-footer">
-        <button className="logout-button">🚪 Logout</button>
+        <button type='button' className="logout-button" onClick={logout}>🚪 Logout</button>
       </div>
     </nav>
   );
