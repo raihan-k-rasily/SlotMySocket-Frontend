@@ -76,7 +76,7 @@ function OwnerStations() {
                 if (result.status === 200) {
                     setStations(result.data);
                     if (result.data.length > 0)
-                     setOpenStationId(result.data[0]._id);
+                        setOpenStationId(result.data[0]._id);
                 }
             } catch (err) {
                 console.error("Error fetching stations:", err);
@@ -85,18 +85,18 @@ function OwnerStations() {
             }
         }
     };
-    
+
     const fetchStationSockets = async (stationId) => {
         console.log(stationId);
-        
+
 
         const token = sessionStorage.getItem("token");
         if (token) {
             const updatedToken = token.replace(/"/g, "");
             const reqHeader = { "Authorization": `Bearer ${updatedToken}` };
             try {
-                const reqBody = {stationId}
-                const result = await getStationSckets(reqBody,reqHeader);
+                const reqBody = { stationId }
+                const result = await getStationSckets(reqBody, reqHeader);
                 if (result.status === 200) {
                     setSockets(result.data);
                 }
@@ -272,12 +272,12 @@ function OwnerStations() {
     useEffect(() => {
         fetchOwnerStations();
     }, []);
-useEffect(() => {
-    if (openStationId) {
-        setSockets([])
-        fetchStationSockets(openStationId);
-    }
-}, [openStationId]);
+    useEffect(() => {
+        if (openStationId) {
+            setSockets([])
+            fetchStationSockets(openStationId);
+        }
+    }, [openStationId]);
     return (
         <div className="admin-dashboard-layout bg-[#0A0A0A] min-h-screen text-[#F0F4F8] flex">
             <OwnerSidebar />
@@ -384,7 +384,7 @@ useEffect(() => {
                                                     className="overflow-hidden"
                                                 >
                                                     <div className="sockets-collapse-wrapper p-6 border-t border-white/5 bg-black/40">
-                                                        {sockets.length>0 ? (
+                                                        {sockets.length > 0 ? (
                                                             <div className="sockets-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                                                 {sockets.map((s, index) => (
                                                                     <SocketCard key={index} socket={s} />
@@ -519,7 +519,7 @@ useEffect(() => {
                                                 <select
                                                     value={socketDetails.powerType} onChange={e => setsocketDetails({ ...socketDetails, powerType: e.target.value })}
                                                     className="custom-input w-full">
-                                                <option value="">Select Power Type</option>
+                                                    <option value="">Select Power Type</option>
                                                     <option value="DC">DC </option>
                                                     <option value="AC">AC</option>
                                                 </select>

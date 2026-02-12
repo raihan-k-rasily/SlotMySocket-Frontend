@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { LayoutGrid, UserCheck, Eye, Settings, Sun, Moon } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext'; // Import the hook
 
@@ -12,6 +12,14 @@ const navItems = [
 
 function AdminSidebar() {
   const { theme, toggleTheme } = useTheme(); // Use global theme logic
+
+  
+      const navigate = useNavigate();
+    const logout = () => {
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("user");
+      navigate("/login");
+    }
 
   return (
     <nav className="admin-sidebar">
@@ -42,7 +50,7 @@ function AdminSidebar() {
             <><Moon size={18} /> Dark Mode</>
           )}
         </button>
-        <button className="logout-button">🚪 Logout</button>
+        <button onClick={logout} className="logout-button">🚪 Logout</button>
       </div>
     </nav>
   );

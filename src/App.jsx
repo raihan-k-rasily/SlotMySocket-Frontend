@@ -9,6 +9,7 @@ import Preloader from './components/Preloader'
 
 import Profile from './users/pages/Profile'
 import Stations from './users/pages/Stations'
+import ViewStation from './users/pages/ViewStation'
 import Contact from './users/pages/Contact'
 
 import AdminHome from './admin/pages/AdminHome'
@@ -50,6 +51,7 @@ function App() {
         <Route path='profile' element={<Profile />} />
         <Route path='stations' element={<Stations />} />
         <Route path='contact' element={<Contact />} />
+        <Route path='viewstation/:id' element={<ViewStation />} />
 
         
         {/* ADMIN */}

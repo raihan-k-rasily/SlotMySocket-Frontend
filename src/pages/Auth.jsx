@@ -134,9 +134,9 @@ function Auth({ userRegister, ownerRegister }) {
           } else {
             // Check if the user status is ACTIVE
             if (response.data?.user?.status === "ACTIVE") {
-              toast.success("Login Successful! Redirecting to Owner Dashboard...");
+              toast.success("Login Successful! Redirecting to User Dashboard...");
               setTimeout(() => {
-                navigate("/ownerhome");
+                navigate("/");
               }, 2000); // Reduced to 2s for better UX, change back to 4000 if preferred
             } else {
               // If status is BLOCKED or anything else

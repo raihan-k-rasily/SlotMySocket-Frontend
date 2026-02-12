@@ -67,3 +67,14 @@ export const addNewsocketByOwner = async (reqBody,reqHeader) => {
 export const getStationSckets = async (reqBody,reqHeader) => {
     return await commonAPI('POST', `${serverURL}/api/owner/get-station-socket`, reqBody, reqHeader);
 };
+
+// 14  Get approved Stations for user API
+export const getUserStation = async (reqHeader) => {
+    return await commonAPI('POST', `${serverURL}/api/user/get-approved-stations`, {}, reqHeader);
+};
+
+// 15  Get view Stations for user API
+export const getViewStation = async (id, reqHeader) => {
+    return await commonAPI('GET',`${serverURL}/api/user/get-view-stations/${id}`, "",reqHeader);
+};
+
