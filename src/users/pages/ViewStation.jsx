@@ -108,8 +108,8 @@ function ViewStation() {
                 <div className="socket-icon">⚡</div>
 
                 <div className="socket-info">
-                  <span className="socket-type">{socket.type}</span>
-                  <span className="socket-power">{socket.power} kW</span>
+                  <span className="socket-type">{socket.connectorType}</span>
+                  <span className="socket-power">{socket.powerType} </span>
                 </div>
 
                 <div
