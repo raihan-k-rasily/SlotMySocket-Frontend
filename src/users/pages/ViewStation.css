@@ -113,6 +113,13 @@
 .status-dot.available { background: #00A36C; box-shadow: 0 0 10px #00A36C; }
 .status-dot.occupied { background: #EF4444; }
 
+.socket-price {
+    color: #00A36C; /* Highlight Green */
+    font-weight: 700;
+    font-size: 1rem;
+    margin-top: 4px;
+}
+
 /* Booking Grid */
 .time-slots-wrapper {
     display: grid;
@@ -135,6 +142,50 @@
 
 .slot-time { display: block; font-weight: 800; font-size: 1.2rem; }
 .slot-status { font-size: 0.7rem; text-transform: uppercase; color: #6B7280; }
+
+.time-slot-btn.free:focus,
+.time-slot-btn.free:active {
+    background: rgba(0, 163, 108, 0.1);
+    border-color: #00A36C;
+    box-shadow: 0 0 15px rgba(0, 163, 108, 0.2);
+    transform: translateY(-2px);
+}
+
+.time-slot-btn.free:hover {
+    border-color: #00A36C;
+    background: #1c2128;
+}
+
+.station-hero-card {
+    background: linear-gradient(135deg, #161B22 0%, #0d1117 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 30px;
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.socket-card {
+    background: #161B22;
+    border: 1px solid #30363d;
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.socket-card.active {
+    border-color: #00A36C;
+    background: rgba(0, 163, 108, 0.05);
+}
 
 .confirm-booking-btn {
     margin-top: 40px;

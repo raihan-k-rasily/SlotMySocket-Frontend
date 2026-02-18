@@ -78,3 +78,19 @@ export const getViewStation = async (id, reqHeader) => {
     return await commonAPI('GET',`${serverURL}/api/user/get-view-stations/${id}`, "",reqHeader);
 };
 
+
+// 16  Get approved Stations for user API
+export const makeBookingPaymentAPI = async (reqBody,reqHeader) => {
+    return await commonAPI('POST', `${serverURL}/api/user/make-booking-payment`, reqBody, reqHeader);
+};
+
+
+// 17 Get Booked Slots
+export const getBookedSlotsAPI = (socketId, date, reqHeader) => {
+  return commonAPI(
+    "GET",
+    `${serverURL}/api/user/booked-slots?socketId=${socketId}&date=${date}`,
+    "",
+    reqHeader
+  );
+};

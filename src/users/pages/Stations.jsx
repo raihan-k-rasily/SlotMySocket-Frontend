@@ -109,7 +109,7 @@ const FilterPanel = ({ from, to, setFrom, setTo, handleRouteSearch }) => (
                 className="filter-panel">Find Route</button>
         </div>
 
-        <div className="filter-group">
+        {/* <div className="filter-group">
             <label style={{ color: TEXT_GRAY }}>Connector Type:</label>
             <select>
                 <option>All</option>
@@ -117,15 +117,15 @@ const FilterPanel = ({ from, to, setFrom, setTo, handleRouteSearch }) => (
                 <option>CHAdeMO</option>
                 <option>Type 2</option>
             </select>
-        </div>
+        </div> */}
 
-        <div className="filter-group">
+        {/* <div className="filter-group">
             <label style={{ color: TEXT_GRAY }}>Availability:</label>
             <select>
                 <option>Available Now</option>
                 <option>All Stations</option>
             </select>
-        </div>
+        </div> */}
     </motion.div>
 );
 

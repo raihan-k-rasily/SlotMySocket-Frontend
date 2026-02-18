@@ -11,6 +11,8 @@ import Profile from './users/pages/Profile'
 import Stations from './users/pages/Stations'
 import ViewStation from './users/pages/ViewStation'
 import Contact from './users/pages/Contact'
+import PaymentSuccess from './users/pages/PaymentSuccess'
+import PaymentError from './users/pages/PaymentError'
 
 import AdminHome from './admin/pages/AdminHome'
 import AdminVerification from './admin/pages/AdminVerification'
@@ -52,6 +54,8 @@ function App() {
         <Route path='stations' element={<Stations />} />
         <Route path='contact' element={<Contact />} />
         <Route path='viewstation/:id' element={<ViewStation />} />
+        <Route path='success' element={<PaymentSuccess />} />
+        <Route path='cancel' element={<PaymentError />} />
 
         
         {/* ADMIN */}

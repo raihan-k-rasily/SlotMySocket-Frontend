@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom'; // 🛑 NEW: Import useLocation hook
 
 import PillNav from '../../bits/components/PillNav ';
@@ -9,6 +9,10 @@ function Header() {
     const location = useLocation();
     const currentPath = location.pathname;
 
+    
+  const token = sessionStorage.getItem("token");
+
+
     return ( 
         <>
             <PillNav
@@ -18,7 +22,15 @@ function Header() {
                     { label: 'Home', href: '/' },
                     { label: 'Stations', href: '/stations' },
                     { label: 'Contact', href: '/contact' },
+                    
+token?
+                    { label: 'Profile', href: '/profile' }
+:
+
                     { label: 'Login', href: '/login' }
+                    
+
+
                 ]}
                 // Use the currentPath variable defined above
                 activeHref={currentPath}
